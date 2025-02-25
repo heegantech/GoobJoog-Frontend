@@ -56,11 +56,14 @@ const RecentTransactions = () => {
     // }
 
     try {
-      const response = await fetch("/api/transactions/", {
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
+      const response = await fetch(
+        "https://api.barrowpay.com/api/transactions/",
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -77,7 +80,7 @@ const RecentTransactions = () => {
 
   const fetchSwapRates = async () => {
     try {
-      const response = await fetch("/api/swap-rates/");
+      const response = await fetch("https://api.barrowpay.com/api/swap-rates/");
       const data = await response.json();
       setSwapRates(data);
     } catch (error) {
