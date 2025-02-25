@@ -30,7 +30,7 @@ const TransactionList = () => {
     try {
       const userData = JSON.parse(localStorage.getItem("userData"));
       const access = userData.access;
-      fetch(`/api/`, {
+      fetch(`https://api.barrowpay.com/api/`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -55,7 +55,7 @@ const TransactionList = () => {
     //   return;
     // }
     try {
-      const response = await fetch("/api/transactions/", {
+      const response = await fetch("https://api.barrowpay.com/api/transactions/", {
         headers: {
           Authorization: `Bearer ${access}`,
         },
