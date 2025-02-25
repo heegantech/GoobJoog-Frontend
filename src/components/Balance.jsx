@@ -47,7 +47,7 @@ const Balance = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch("/api/pending-payments/", {
+      const response = await fetch("https://api.barrowpay.com/api/pending-payments/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
