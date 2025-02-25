@@ -60,7 +60,7 @@ const Login = () => {
 
       {/* Login Form */}
       <div className="flex flex-col items-center justify-center py-10 px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8 bg-white shadow-lg rounded-lg p-8">
+        <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-t-lg">
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold text-green-600">Welcome back</h1>
             <p className="text-lg text-gray-600">Sign in to continue</p>
@@ -141,6 +141,9 @@ const Login = () => {
           </form>
         </div>
       </div>
+
+      {/* Curved Shape at Bottom Right */}
+      <div className="absolute bottom-0 right-0 w-full h-32 bg-green-600 rounded-tl-full"></div>
     </div>
   );
 };
