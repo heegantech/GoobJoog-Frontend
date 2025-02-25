@@ -48,6 +48,15 @@ const Login = () => {
       {/* Left Column - Login Form */}
       <div className="flex items-center justify-center p-6 lg:p-8">
         <div className="w-full max-w-sm space-y-8">
+          {/* Top Rounded Circle Image */}
+          <div className="flex justify-center mb-6">
+            <img
+              src="https://via.placeholder.com/150" // Replace with your image URL
+              alt="Logo"
+              className="w-24 h-24 rounded-full object-cover"
+            />
+          </div>
+
           <div className="space-y-2">
             <h1 className="text-4xl font-bold text-green-500 tracking-tight">
               Welcome back
@@ -61,7 +70,7 @@ const Login = () => {
                 <div className="absolute inset-y-0 left-0 flex items-center pl-4">
                   <div className="flex items-center gap-2 pr-3 border-r">
                     <img
-                      src="https://flagcdn.com/w40/so.png"
+                      src="https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg"
                       width={22}
                       height={16}
                       alt="Somalia flag"
@@ -74,7 +83,7 @@ const Login = () => {
                 <Input
                   type="tel"
                   placeholder="Phone number"
-                  className="pl-[108px]       py-5"
+                  className="pl-[108px] py-5"
                   value={loginData.phone_number}
                   onChange={(e) =>
                     setLoginData({ ...loginData, phone_number: e.target.value })
@@ -112,6 +121,15 @@ const Login = () => {
                 className="text-sm text-muted-foreground hover:text-black transition-colors"
               >
                 Need help signing in?
+              </Link>
+            </div>
+            {/* Register Link */}
+            <div className="text-center mt-4">
+              <Link
+                to="/register"
+                className="text-sm text-green-500 hover:text-green-700 transition-colors"
+              >
+                Don't have an account? Register here
               </Link>
             </div>
           </form>
