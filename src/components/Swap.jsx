@@ -77,47 +77,62 @@ const Swap = () => {
     }));
   };
 
-  const handleSwap = async (e) => {
-    e.preventDefault();
+const handleSwap = async (e) => {
+  e.preventDefault();
 
-    // Validate if both wallets are selected
-    if (!swapData.from_wallet || !swapData.to_wallet) {
-      toast.error("Please provide both 'From' and 'To' wallet values.");
-      return;
-    }
+  if (!swapData.from_wallet || !swapData.to_wallet) {
+    toast.error("Please provide both 'From' and 'To' wallet values.");
+    return;
+  }
 
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const access = userData.access;
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const access = userData.access;
 
-    try {
-      const response = await fetch("https://api.barrowpay.com/api/swap/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access}`,
-        },
-        body: JSON.stringify(swapData),
+  try {
+    const response = await fetch("https://api.barrowpay.com/api/swap/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access}`,
+      },
+      body: JSON.stringify(swapData),
+    });
+
+    const responseData = await response.json();
+    if (response.ok) {
+      toast.success(responseData.message || "Swap successful");
+      
+      // Format WhatsApp message
+      const adminPhoneNumber = "252616555736"; // Replace with actual number
+      const formattedMessage = `🔄 *New Swap Created* 🔄\n\n`
+        + `📌 *From Wallet:* ${swapData.from_wallet}\n`
+        + `📌 *To Wallet:* ${swapData.to_wallet}\n`
+        + `📌 *Swap Address:* ${swapData.swap_address}\n`
+        + `📌 *Amount:* ${swapData.amount}\n`
+        + `📌 *Swap Fee:* ${swapRate * 100}%\n`
+        + `📌 *Total to Receive:* ${swapData.amount - swapData.amount * swapRate}\n\n`
+        + `✅ Please review the transaction.`;
+
+      // Open WhatsApp with the pre-filled message
+      const whatsappURL = `https://wa.me/${adminPhoneNumber}?text=${encodeURIComponent(formattedMessage)}`;
+      window.open(whatsappURL, "_blank");
+
+      navigate("/");
+      setSwapData({
+        from_wallet: "",
+        to_wallet: "",
+        swap_address: "",
+        amount: "",
       });
-
-      const responseData = await response.json();
-      console.log("swap response", responseData);
-      if (response.ok) {
-        navigate("/");
-        setSwapData({
-          from_wallet: "",
-          to_wallet: "",
-          swap_address: "",
-          amount: "",
-        });
-        toast.success(responseData.message || "Swap successful");
-      } else {
-        throw new Error(responseData.message || "Swap failed");
-      }
-    } catch (error) {
-      toast.error(error.message);
-      console.error("Error:", error);
+    } else {
+      throw new Error(responseData.message || "Swap failed");
     }
-  };
+  } catch (error) {
+    toast.error(error.message);
+    console.error("Error:", error);
+  }
+};
+
 
   // Calculate the total amount to receive after applying the swap fee
   const totalReceive =
