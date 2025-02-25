@@ -18,6 +18,7 @@ const Withdraw = ({ closeModal, fetchBalance, pendingPayment }) => {
     const formData = new FormData(e.target);
     const withdrawData = {
       wallet_name: method || "",
+      phone_number:formData.get("phone_number"),
       amount: Number.parseFloat(formData.get("amount")),
     };
 
@@ -84,8 +85,9 @@ const Withdraw = ({ closeModal, fetchBalance, pendingPayment }) => {
             htmlFor="phone_number"
             className="block text-sm font-medium text-green-700 mb-1"
           >
-            Amount
+            Phone number
           </label>
+          
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-4">
               <div className="flex items-center gap-2 pr-3 border-r">
