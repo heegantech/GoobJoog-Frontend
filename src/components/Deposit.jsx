@@ -137,6 +137,36 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
 
   return (
     <div className="mt-20 px-5">
+      <h2 className="text-2xl font-semibold text-primary-700 mb-6">Deposit Funds</h2>
+
+      {/* Summary Table */}
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold text-primary-700 mb-2">Deposit Summary</h3>
+        <table className="min-w-full table-auto border-collapse">
+          <thead>
+            <tr>
+              <th className="px-4 py-2 text-left font-medium text-primary-600 border-b">Field</th>
+              <th className="px-4 py-2 text-left font-medium text-primary-600 border-b">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="px-4 py-2 text-primary-600 border-b">Wallet Method</td>
+              <td className="px-4 py-2 text-primary-600 border-b">{depositData.wallet_name}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2 text-primary-600 border-b">Amount</td>
+              <td className="px-4 py-2 text-primary-600 border-b">${depositData.amount}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2 text-primary-600 border-b">Phone Number</td>
+              <td className="px-4 py-2 text-primary-600 border-b">{depositData.phone_number}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Deposit Form */}
       <form onSubmit={handleDeposit}>
         <div className="mb-4">
           <label
