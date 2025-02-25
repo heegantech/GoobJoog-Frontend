@@ -90,7 +90,7 @@ const Swap = () => {
     const access = userData.access;
 
     try {
-      const response = await fetch("/api/swap/", {
+      const response = await fetch("https://api.barrowpay.com/api/swap/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
