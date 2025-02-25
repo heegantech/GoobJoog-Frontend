@@ -3,224 +3,240 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
-  const { method } = useParams();
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [showInstructions, setShowInstructions] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
+    const { method } = useParams();
+    const [paymentMethod, setPaymentMethod] = useState("");
+    const [showInstructions, setShowInstructions] = useState(false);
+    const [copySuccess, setCopySuccess] = useState(false);
 
-  const [depositData, setDepositData] = useState({
-    wallet_name: method || "",
-    amount: "",
-    phone_number: "616555736", // Default phone number as per your request
-  });
-
-  const [logedUser, setLogedUser] = useState(null);
-
-  const handlePaymentMethodChange = (event) => {
-    const selectedMethod = event.target.value;
-    setPaymentMethod(selectedMethod);
-    setShowInstructions(true); // Show instructions when a method is selected
-    setDepositData((prevData) => ({
-      ...prevData,
-      wallet_name: selectedMethod,
-    }));
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setDepositData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleCopyUSSD = () => {
-    const ussdCode = `*712*616555736*${depositData.amount}#`; // Updated USSD code
-    navigator.clipboard.writeText(ussdCode).then(() => {
-      setCopySuccess(true);
-      setTimeout(() => {
-        setCopySuccess(false);
-      }, 2000);
+    const [depositData, setDepositData] = useState({
+        wallet_name: method || "",
+        amount: "",
+        phone_number: "616555736", // Default phone number as per your request
     });
-  };
 
-  const navigate = useNavigate();
-  const handleDeposit = async (e) => {
-    e.preventDefault();
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const access = userData.access;
+    const [logedUser, setLogedUser] = useState(null);
 
-    if (!access) {
-      navigate("/login");
-      return;
-    }
+    const handlePaymentMethodChange = (event) => {
+        const selectedMethod = event.target.value;
+        setPaymentMethod(selectedMethod);
+        setShowInstructions(true); // Show instructions when a method is selected
+        setDepositData((prevData) => ({
+            ...prevData,
+            wallet_name: selectedMethod,
+        }));
+    };
 
-    if (depositData.amount < 0) {
-      toast.error("Amount cannot be negative");
-      return;
-    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'phone_number') {
+            // Remove any non-digit characters
+            const formattedValue = value.replace(/\D/g, '');
+            // Ensure the number starts with 6 and is no longer than 9 digits
+            const validValue = formattedValue.startsWith('6') ? formattedValue.slice(0, 9) : '6' + formattedValue.slice(0, 8);
+            setDepositData((prevData) => ({
+                ...prevData,
+                [name]: validValue,
+            }));
+        } else {
+            setDepositData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+    };
 
-    try {
-      const response = await fetch("https://api.barrowpay.com/api/deposit/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access}`,
-        },
-        body: JSON.stringify(depositData),
-      });
-
-      const responseData = await response.json();
-
-      if (response.ok) {
-        toast.success(responseData.message);
-        setDepositData({
-          wallet_name: "",
-          amount: "",
-          phone_number: "",
+    const handleCopyUSSD = () => {
+        const ussdCode = `*712*616555736*${depositData.amount}#`; // Updated USSD code
+        navigator.clipboard.writeText(ussdCode).then(() => {
+            setCopySuccess(true);
+            setTimeout(() => {
+                setCopySuccess(false);
+            }, 2000);
         });
-        // Show the instructions and delay the redirection
-        setTimeout(() => {
-          window.location.href = `tel:*712*616555736*${depositData.amount}#`; // Updated USSD code
-        }, 3000); // Delay redirection for 3 seconds (you can adjust this delay)
-      } else {
-        throw new Error(responseData.message || "Deposit failed");
-      }
-    } catch (error) {
-      toast.error(error.message);
-      console.error("Error:", error);
-    }
-  };
+    };
 
-  const userMe = async () => {
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const access = userData.access;
-    try {
-      const response = await fetch("/auth/users/me/", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
+    const navigate = useNavigate();
+    const handleDeposit = async (e) => {
+        e.preventDefault();
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        const access = userData.access;
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      console.log(data);
-      setLogedUser(data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+        if (!access) {
+            navigate("/login");
+            return;
+        }
 
-  useEffect(() => {
-    userMe();
-  }, [logedUser]);
+        if (depositData.amount < 0) {
+            toast.error("Amount cannot be negative");
+            return;
+        }
 
-  if (method !== "evcplus") {
-    return (
-      <div className="mt-20 px-5">
-        <h2 className="text-xl font-semibold text-primary-700">Coming Soon</h2>
-      </div>
-    );
-  }
+        try {
+            const response = await fetch("https://api.barrowpay.com/api/deposit/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${access}`,
+                },
+                body: JSON.stringify(depositData),
+            });
 
-  return (
-    <div className="mt-20 px-5">
-      <form onSubmit={handleDeposit}>
-        <div className="mb-4">
-          <label
-            htmlFor="amount"
-            className="block text-sm font-medium text-primary-700 mb-1"
-          >
-            Amount
-          </label>
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-500">
-              $
-            </span>
-            <input
-              type="number"
-              id="amount"
-              name="amount"
-              value={depositData.amount}
-              min="0"
-              step="0.01"
-              required
-              className="block w-full pl-7 pr-12 py-2 border border-green-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
-              placeholder="0.00"
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="phone_number"
-            className="block text-sm font-medium text-primary-700 mb-1"
-          >
-            Phone Number
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4">
-              <div className="flex items-center gap-2 pr-3 border-r">
-                <img
-                  src="https://flagcdn.com/w40/so.png"
-                  width={22}
-                  height={16}
-                  alt="Somalia flag"
-                  className="rounded-sm"
-                />
-                <span className="text-sm font-medium">+252</span>
-              </div>
+            const responseData = await response.json();
+
+            if (response.ok) {
+                toast.success(responseData.message);
+                setDepositData({
+                    wallet_name: "",
+                    amount: "",
+                    phone_number: "",
+                });
+                // Show the instructions and delay the redirection
+                setTimeout(() => {
+                    window.location.href = `tel:*712*616555736*${depositData.amount}#`; // Updated USSD code
+                }, 3000); // Delay redirection for 3 seconds (you can adjust this delay)
+            } else {
+                throw new Error(responseData.message || "Deposit failed");
+            }
+        } catch (error) {
+            toast.error(error.message);
+            console.error("Error:", error);
+        }
+    };
+
+    const userMe = async () => {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        const access = userData.access;
+        try {
+            const response = await fetch("/auth/users/me/", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${access}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            console.log(data);
+            setLogedUser(data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    useEffect(() => {
+        userMe();
+    }, [logedUser]);
+
+    if (method !== "evcplus") {
+        return (
+            <div className="mt-20 px-5">
+                <h2 className="text-xl font-semibold text-primary-700">Coming Soon</h2>
             </div>
-            <input
-              type="number"
-              id="phone_number"
-              name="phone_number"
-              value={depositData.phone_number}
-              min="0"
-              step="0.01"
-              required
-              className="block w-full pl-24 pr-12 py-2 border border-green-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
-              placeholder="61635353"
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
+        );
+    }
 
-        {/* Instructions section */}
-        {showInstructions && (
-          <div className="mb-4 p-4 border bg-gray-50 rounded-md">
-            <h3 className="text-sm font-semibold text-primary-700 mb-2">
-              Instructions
-            </h3>
-            <p className="text-sm text-primary-600">
-              To make a deposit, please use the USSD code below:
-              <br />
-              <strong>*712*616555736*{depositData.amount}#</strong>
-            </p>
-            <button
-              type="button"
-              className="mt-2 text-blue-500 text-sm"
-              onClick={handleCopyUSSD}
-            >
-              {copySuccess ? "Copied!" : "Copy USSD Code"}
-            </button>
-          </div>
-        )}
+    return (
+        <div className="mt-20 px-5">
+            <form onSubmit={handleDeposit}>
+                <div className="mb-4">
+                    <label
+                        htmlFor="amount"
+                        className="block text-sm font-medium text-primary-700 mb-1"
+                    >
+                        Amount
+                    </label>
+                    <div className="relative">
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-500">
+                            $
+                        </span>
+                        <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            value={depositData.amount}
+                            min="0"
+                            step="0.01"
+                            required
+                            className="block w-full pl-7 pr-12 py-2 border border-green-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                            placeholder="0.00"
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                </div>
+                <div className="mb-4">
+                    <label
+                        htmlFor="phone_number"
+                        className="block text-sm font-medium text-primary-700 mb-1"
+                    >
+                        Phone Number
+                    </label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+                            <div className="flex items-center gap-2 pr-3 border-r">
+                                <img
+                                    src="https://flagcdn.com/w40/so.png"
+                                    width={22}
+                                    height={16}
+                                    alt="Somalia flag"
+                                    className="rounded-sm"
+                                />
+                                <span className="text-sm font-medium">+252</span>
+                            </div>
+                        </div>
+                        <input
+                            type="tel"
+                            id="phone_number"
+                            name="phone_number"
+                            value={depositData.phone_number}
+                            required
+                            pattern="^6[1-9][0-9]{7}$"
+                            maxLength="9"
+                            className="block w-full pl-24 pr-12 py-2 border border-green-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                            placeholder="615XXXXXX"
+                            onChange={handleInputChange}
+                            onInvalid={(e) => e.target.setCustomValidity('Please enter a valid 9-digit phone number starting with 6')}
+                            onInput={(e) => e.target.setCustomValidity('')}
+                        />
+                    </div>
+                    {depositData.phone_number && depositData.phone_number.length !== 9 && (
+                        <p className="text-red-500 text-xs mt-1">Phone number must be exactly 9 digits long</p>
+                    )}
+                </div>
 
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-green-700 transition duration-300"
-          >
-            Deposit
-          </button>
+                {/* Instructions section */}
+                {showInstructions && (
+                    <div className="mb-4 p-4 border bg-gray-50 rounded-md">
+                        <h3 className="text-sm font-semibold text-primary-700 mb-2">
+                            Instructions
+                        </h3>
+                        <p className="text-sm text-primary-600">
+                            To make a deposit, please use the USSD code below:
+                            <br />
+                            <strong>*712*616555736*{depositData.amount}#</strong>
+                        </p>
+                        <button
+                            type="button"
+                            className="mt-2 text-blue-500 text-sm"
+                            onClick={handleCopyUSSD}
+                        >
+                            {copySuccess ? "Copied!" : "Copy USSD Code"}
+                        </button>
+                    </div>
+                )}
+
+                <div className="flex gap-4">
+                    <button
+                        type="submit"
+                        className="w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-green-700 transition duration-300"
+                    >
+                        Deposit
+                    </button>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  );
+    );
 };
 
 export default Deposit;
