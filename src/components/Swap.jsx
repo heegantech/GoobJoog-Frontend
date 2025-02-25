@@ -100,7 +100,7 @@ const Swap = () => {
       });
 
       const responseData = await response.json();
-
+      console.log("swap response",responseData)
       if (response.ok) {
         navigate("/");
         setSwapData({
