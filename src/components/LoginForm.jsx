@@ -12,6 +12,8 @@ const Login = () => {
     phone_number: "",
     password: "",
   });
+
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { login } = useAuth();
@@ -21,8 +23,14 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // if (!validatePhoneNumber(loginData.phone_number)) {
+    //   setError("Phone number must be 9 digits and start with 07 or 61.");
+    //   setIsLoading(false);
+    //   return;
+    // }
+
     try {
-      const response = await fetch("https://api.barrowpay.com/auth/jwt/create/", {
+      const response = await fetch("/auth/jwt/create/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
@@ -43,13 +51,19 @@ const Login = () => {
     }
   };
 
+  const validatePhoneNumber = (phone) => {
+    // Check if the phone number is 9 digits and either starts with 07 or 61
+    const phonePattern = /^(07\d{7}|61\d{7})$/;
+    return phonePattern.test(phone);
+  };
+
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left Column - Login Form */}
       <div className="flex items-center justify-center p-6 lg:p-8">
         <div className="w-full max-w-sm space-y-8">
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-green-500 tracking-tight">
+            <h1 className="text-4xl font-bold text-[#292a86] tracking-tight">
               Welcome back
             </h1>
             <p className="text-lg text-muted-foreground">Sign in to continue</p>
@@ -71,10 +85,10 @@ const Login = () => {
                   </div>
                 </div>
 
-                <Input
+                <input
                   type="tel"
                   placeholder="Phone number"
-                  className="pl-[108px]       py-5"
+                  className="appearance-none border bg-white border-[#292a86] rounded-lg w-full py-3 px-3 pl-24"
                   value={loginData.phone_number}
                   onChange={(e) =>
                     setLoginData({ ...loginData, phone_number: e.target.value })
@@ -85,10 +99,10 @@ const Login = () => {
             </div>
             {/* Password Input */}
             <div className="space-y-2">
-              <Input
+              <input
                 type="password"
                 placeholder="Enter password"
-                className="py-5"
+                className="appearance-none border bg-white border-[#292a86] rounded-lg w-full py-3 px-3"
                 value={loginData.password}
                 onChange={(e) =>
                   setLoginData({ ...loginData, password: e.target.value })
@@ -99,7 +113,7 @@ const Login = () => {
             {/* Login Button */}
             <Button
               type="submit"
-              className="w-full bg-green-500 hover:bg-green-200 text-white h-12 text-base font-medium"
+              className="w-full bg-[#292a86] hover:bg-[#8b8dce] text-white h-12 text-base font-medium"
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Continue"}
@@ -110,7 +124,7 @@ const Login = () => {
             <div className="text-center mt-4">
               <Link
                 to="/register"
-                className="text-sm text-green-600 hover:text-green-700 transition-colors"
+                className="text-sm text-[#292a86] hover:[#292a86] transition-colors"
               >
                 Don't have an account? Register here
               </Link>
