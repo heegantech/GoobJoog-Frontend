@@ -87,21 +87,35 @@ const handleSwap = async (e) => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const access = userData?.access;
+  const username = userData?.username || "Unknown User";
+
+  // Admin phone number
+  const adminPhoneNumber = "252616555736"; 
+
+  // Calculate amounts
+  const swapFee = swapData.amount * swapRate;
+  const totalReceive = swapData.amount - swapFee;
 
   // Format WhatsApp message
-  const adminPhoneNumber = "252616555736"; // Replace with actual number
   const formattedMessage = `🔄 *New Swap Created* 🔄\n\n`
-    + `📌 *From Wallet:* ${swapData.from_wallet}\n`
-    + `📌 *To Wallet:* ${swapData.to_wallet}\n`
-    + `📌 *Swap Address:* ${swapData.swap_address}\n`
-    + `📌 *Amount:* ${swapData.amount}\n`
-    + `📌 *Swap Fee:* ${swapRate * 100}%\n`
-    + `📌 *Total to Receive:* ${swapData.amount - swapData.amount * swapRate}\n\n`
-    + `✅ Please review the transaction.`;
+    + `👤 *User:* ${username}\n`
+    + `----------------------------------\n`
+    + `📌 *Transaction Details:*\n`
+    + `----------------------------------\n`
+    + `| *Field*            | *Value*           |\n`
+    + `|----------------|----------------|\n`
+    + `| From Wallet    | ${swapData.from_wallet} |\n`
+    + `| To Wallet      | ${swapData.to_wallet} |\n`
+    + `| Swap Address   | ${swapData.swap_address} |\n`
+    + `| Amount         | $${swapData.amount} |\n`
+    + `| Swap Fee       | $${swapFee} (${swapRate * 100}%) |\n`
+    + `| Total Receive  | $${totalReceive} |\n`
+    + `----------------------------------\n`
+    + `✅ *Please review the transaction.*`;
 
   // Open WhatsApp message immediately
   const whatsappURL = `https://wa.me/${adminPhoneNumber}?text=${encodeURIComponent(formattedMessage)}`;
-  setTimeout(() => window.open(whatsappURL, "_blank"), 500); // Delay slightly for UX smoothness
+  setTimeout(() => window.open(whatsappURL, "_blank"), 500); // Smooth UX
 
   try {
     const response = await fetch("https://api.barrowpay.com/api/swap/", {
@@ -133,6 +147,7 @@ const handleSwap = async (e) => {
     console.error("Error:", error);
   }
 };
+
 
   // Calculate the total amount to receive after applying the swap fee
   const totalReceive =
