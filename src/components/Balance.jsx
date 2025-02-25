@@ -134,7 +134,7 @@ const Balance = () => {
         <div className="space-y-1">
           <p className="text-sm text-white">Available balance</p>
           <p className="text-4xl font-semibold tracking-tight">
-            {isVisible ? `$${balance?.evcplus.toFixed(2)}` : "••••••"}
+            {isVisible ? `$${balance}` : "••••••"}
           </p>
         </div>
         <div className="flex items-center justify-between">
