@@ -1,4 +1,4 @@
-import { Lock, User, Mail, Phone } from "lucide-react";
+import { Lock, User, Phone } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,19 +9,34 @@ const Register = () => {
     password: "",
   });
 
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const validatePhoneNumber = (phone) => {
+    // Check if the phone number is 9 digits and either starts with 07 or is a 9-digit number
+    const phonePattern = /^(07\d{7}|61\d{7})$/;
+    return phonePattern.test(phone);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate phone number
+    if (!validatePhoneNumber(registerData.phone_number)) {
+      setError("Phone number must be 9 digits and start with 07 or 61.");
+      return; // Prevent form submission if validation fails
+    }
+
+    setError(""); // Clear any previous error
+
     try {
-      const response = await fetch("https://api.barrowpay.com/api/register/", {
+      const response = await fetch("https://api.barrowpay.com/auth/user/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           full_name: registerData.full_name,
-          email: registerData.email,
           phone_number: registerData.phone_number,
           password: registerData.password,
         }),
@@ -39,7 +54,7 @@ const Register = () => {
       <div className="w-full max-w-md px-4">
         <div className="text-start mb-8">
           <h1 className="text-4xl font-bold text-green-600">Barrow Pay</h1>
-          <p className="text-green-600 mt-2 ">Create your account below.</p>
+          <p className="text-green-600 mt-2">Create your account below.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -58,10 +73,9 @@ const Register = () => {
                 id="fullName"
                 type="text"
                 placeholder="Enter your full name"
-                value={registerData.fullName}
-                // onChange={(e) => setFullName(e.target.value)}
+                value={registerData.full_name}
                 onChange={(e) =>
-                  setRegisterData({ ...registerData, fullName: e.target.value })
+                  setRegisterData({ ...registerData, full_name: e.target.value })
                 }
               />
             </div>
@@ -83,17 +97,18 @@ const Register = () => {
                 id="phoneNumber"
                 type="tel"
                 placeholder="Enter your phone number"
-                value={registerData.phoneNumber}
-                // onChange={(e) => setPhoneNumber(e.target.value)}
+                value={registerData.phone_number}
                 onChange={(e) =>
                   setRegisterData({
                     ...registerData,
-                    phoneNumber: e.target.value,
+                    phone_number: e.target.value,
                   })
                 }
               />
             </div>
+            {error && <p className="text-red-600 text-sm">{error}</p>}
           </div>
+
           <div>
             <label
               className="block text-green-700 text-sm font-bold mb-2"
@@ -111,13 +126,13 @@ const Register = () => {
                 type="password"
                 placeholder="Enter your password"
                 value={registerData.password}
-                // onChange={(e) => setPassword(e.target.value)}
                 onChange={(e) =>
                   setRegisterData({ ...registerData, password: e.target.value })
                 }
               />
             </div>
           </div>
+
           <div>
             <button
               className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none transition duration-300"
