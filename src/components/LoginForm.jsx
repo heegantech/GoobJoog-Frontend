@@ -44,21 +44,23 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
-      {/* Full-width Circular Curved Image */}
-      <div className="relative w-full h-64 overflow-hidden rounded-b-full bg-gradient-to-r from-blue-500 to-green-500">
-        <img
-          src="https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg" // Replace with your image URL
-          alt="Logo"
-          className="object-cover w-full h-full absolute top-0 left-0"
-          style={{
-            clipPath: "circle(50% at 50% 50%)", // Creating a circular effect on the image
-          }}
-        />
+      {/* Full-width Image with Overlay */}
+      <div className="relative w-full h-64 bg-cover bg-center" 
+           style={{
+             backgroundImage: `url("https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg")`
+           }}>
+        {/* Overlay Color */}
+        <div className="absolute inset-0 bg-black opacity-40" />
+        
+        {/* Top Logo */}
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+          <img src="https://barrowpay.com/logo.png" alt="Logo" className="w-28" />
+        </div>
       </div>
 
       {/* Login Form */}
       <div className="flex flex-col items-center justify-center py-10 px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md space-y-8 bg-white shadow-lg rounded-lg p-8">
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold text-green-600">Welcome back</h1>
             <p className="text-lg text-gray-600">Sign in to continue</p>
