@@ -58,16 +58,17 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const navigate = useNavigate();
     const handleDeposit = async (e) => {
         e.preventDefault();
-        const userData = JSON.parse(localStorage.getItem("userData"));
-        const access = userData.access;
 
-        if (!access) {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        if (!userData || !userData.access) {
             navigate("/login");
             return;
         }
 
-        if (depositData.amount < 0) {
-            toast.error("Amount cannot be negative");
+        const access = userData.access;
+
+        if (depositData.amount <= 0) {
+            toast.error("Amount must be greater than zero");
             return;
         }
 
@@ -105,7 +106,11 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
 
     const userMe = async () => {
         const userData = JSON.parse(localStorage.getItem("userData"));
-        const access = userData.access;
+        const access = userData?.access;
+        if (!access) {
+            console.error("No access token available");
+            return;
+        }
         try {
             const response = await fetch("/auth/users/me/", {
                 method: "GET",
@@ -118,14 +123,13 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
                 throw new Error("Network response was not ok");
             }
             const data = await response.json();
-            console.log(data);
             setLogedUser(data);
             
             // Set the phone number from user data
             if (data.phone_number) {
                 setDepositData(prevData => ({
                     ...prevData,
-                    phone_number: data.phone_number.replace('+252', '') // Remove the country code if present
+                    phone_number: data.phone_number // Use the phone number directly from the API
                 }));
             }
         } catch (error) {
@@ -202,8 +206,6 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
                             className="block w-full pl-24 pr-12 py-2 border border-green-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
                             placeholder="615XXXXXX"
                             onChange={handleInputChange}
-                            onInvalid={(e) => e.target.setCustomValidity('Please enter a valid 9-digit phone number starting with 6')}
-                            onInput={(e) => e.target.setCustomValidity('')}
                         />
                     </div>
                     {depositData.phone_number && depositData.phone_number.length !== 9 && (
