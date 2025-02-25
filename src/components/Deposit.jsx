@@ -96,7 +96,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch("/auth/users/me/", {
+      const response = await fetch("https://api.barrowpay.com/auth/users/me/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
