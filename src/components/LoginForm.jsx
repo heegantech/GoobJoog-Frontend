@@ -44,19 +44,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
-      {/* Full-width Image with Overlay */}
-      <div className="relative w-full h-64 bg-cover bg-center" 
-           style={{
-             backgroundImage: `url("https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg")`
-           }}>
-        {/* Overlay Color */}
-        <div className="absolute inset-0 bg-black opacity-40" />
-        
-        {/* Top Logo */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-          <img src="https://barrowpay.com/logo.png" alt="Logo" className="w-28" />
-        </div>
-      </div>
 
       {/* Login Form */}
       <div className="flex flex-col items-center justify-center py-10 px-6 lg:px-8">
