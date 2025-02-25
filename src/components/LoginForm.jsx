@@ -143,7 +143,7 @@ const Login = () => {
       </div>
 
       {/* Curved Shape at Bottom Right */}
-      <div className="absolute bottom-0 right-0 w-full h-32 bg-green-600 rounded-tl-full"></div>
+      <div className="absolute bottom-0 right-0 w-full h-32 bg-green-600 rounded-tl-full"></div> 
     </div>
   );
 };
