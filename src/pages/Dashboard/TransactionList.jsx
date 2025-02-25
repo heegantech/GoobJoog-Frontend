@@ -30,15 +30,12 @@ const TransactionList = () => {
     try {
       const userData = JSON.parse(localStorage.getItem("userData"));
       const access = userData.access;
-      fetch(
-        `https://api.barrowpay.com/api/`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      fetch(`/api/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
     } catch (error) {
       console.error("Error:", error);
     }
@@ -58,14 +55,11 @@ const TransactionList = () => {
     //   return;
     // }
     try {
-      const response = await fetch(
-        "https://api.barrowpay.com/api/transactions/",
-        {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const response = await fetch("/api/transactions/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -223,8 +217,8 @@ const TransactionList = () => {
                       >
                         {transaction.type === "Payout" ||
                         transaction.type === "Swap"
-                          ? `-$${transaction.amount.toFixed(2)}`
-                          : `+$${transaction.amount.toFixed(2)}`}
+                          ? `-$${Number(transaction.amount).toFixed(2)}`
+                          : `+$${Number(transaction.amount).toFixed(2)}`}
                       </span>
                     </div>
                   </DrawerTrigger>
