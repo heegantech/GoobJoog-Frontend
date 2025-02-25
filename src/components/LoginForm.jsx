@@ -48,12 +48,12 @@ const Login = () => {
       {/* Left Column - Login Form */}
       <div className="flex items-center justify-center p-6 lg:p-8">
         <div className="w-full max-w-sm space-y-8">
-          {/* Top Rounded Circle Image */}
+          {/* Top Image as Header */}
           <div className="flex justify-center mb-6">
             <img
               src="https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg" // Replace with your image URL
               alt="Logo"
-              className="w-24 h-24 rounded-full object-cover"
+              className="w-full h-48 object-cover rounded-t-lg" // Adjusted for header style
             />
           </div>
 
