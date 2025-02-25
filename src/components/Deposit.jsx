@@ -139,33 +139,6 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     <div className="mt-20 px-5">
       <h2 className="text-2xl font-semibold text-primary-700 mb-6">Deposit Funds</h2>
 
-      {/* Summary Table */}
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold text-primary-700 mb-2">Deposit Summary</h3>
-        <table className="min-w-full table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 text-left font-medium text-primary-600 border-b">Field</th>
-              <th className="px-4 py-2 text-left font-medium text-primary-600 border-b">Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="px-4 py-2 text-primary-600 border-b">Wallet Method</td>
-              <td className="px-4 py-2 text-primary-600 border-b">{depositData.wallet_name}</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-2 text-primary-600 border-b">Amount</td>
-              <td className="px-4 py-2 text-primary-600 border-b">${depositData.amount}</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-2 text-primary-600 border-b">Phone Number</td>
-              <td className="px-4 py-2 text-primary-600 border-b">{depositData.phone_number}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
       {/* Deposit Form */}
       <form onSubmit={handleDeposit}>
         <div className="mb-4">
@@ -256,6 +229,33 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
           </button>
         </div>
       </form>
+
+      {/* Deposit Summary Table (Moved down and dashed borders) */}
+      <div className="mt-6">
+        <h3 className="text-xl font-semibold text-primary-700 mb-2">Deposit Summary</h3>
+        <table className="min-w-full table-auto">
+          <thead>
+            <tr>
+              <th className="px-4 py-2 text-left font-medium text-primary-600 border-b-2 border-dashed">Field</th>
+              <th className="px-4 py-2 text-left font-medium text-primary-600 border-b-2 border-dashed">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="px-4 py-2 text-primary-600 border-b border-dashed">Wallet Method</td>
+              <td className="px-4 py-2 text-primary-600 border-b border-dashed">{depositData.wallet_name}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2 text-primary-600 border-b border-dashed">Amount</td>
+              <td className="px-4 py-2 text-primary-600 border-b border-dashed">${depositData.amount}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2 text-primary-600 border-b border-dashed">Phone Number</td>
+              <td className="px-4 py-2 text-primary-600 border-b border-dashed">{depositData.phone_number}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
