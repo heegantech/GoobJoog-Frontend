@@ -43,30 +43,29 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
-      {/* Left Column - Login Form */}
-      <div className="flex items-center justify-center p-6 lg:p-8">
-        <div className="w-full max-w-sm space-y-8">
-          {/* Curved Image as Header */}
-          <div className="overflow-hidden mb-6">
-            <img
-              src="https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg" // Replace with your image URL
-              alt="Logo"
-              className="w-full h-48 object-cover"
-              style={{
-                clipPath: "polygon(0 0, 100% 0%, 100% 85%, 0% 100%)",
-              }} // Apply the curved effect here
-            />
+    <div className="min-h-screen w-full bg-gray-50 flex flex-col">
+      {/* Full-width Circular Curved Image */}
+      <div className="relative w-full h-64 overflow-hidden rounded-b-full bg-gradient-to-r from-blue-500 to-green-500">
+        <img
+          src="https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg" // Replace with your image URL
+          alt="Logo"
+          className="object-cover w-full h-full absolute top-0 left-0"
+          style={{
+            clipPath: "circle(50% at 50% 50%)", // Creating a circular effect on the image
+          }}
+        />
+      </div>
+
+      {/* Login Form */}
+      <div className="flex flex-col items-center justify-center py-10 px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-bold text-green-600">Welcome back</h1>
+            <p className="text-lg text-gray-600">Sign in to continue</p>
           </div>
 
-          <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-green-500 tracking-tight">
-              Welcome back
-            </h1>
-            <p className="text-lg text-muted-foreground">Sign in to continue</p>
-          </div>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Phone Input with Flag */}
+            {/* Phone Number Input with Flag */}
             <div className="space-y-2">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-4">
@@ -81,7 +80,6 @@ const Login = () => {
                     <span className="text-sm font-medium">+252</span>
                   </div>
                 </div>
-
                 <Input
                   type="tel"
                   placeholder="Phone number"
@@ -94,6 +92,7 @@ const Login = () => {
                 />
               </div>
             </div>
+
             {/* Password Input */}
             <div className="space-y-2">
               <Input
@@ -107,50 +106,37 @@ const Login = () => {
                 required
               />
             </div>
-            {/* Login Button */}
+
+            {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full bg-green-500 hover:bg-green-200 text-white h-12 text-base font-medium"
+              className="w-full bg-green-600 hover:bg-green-500 text-white h-12 text-base font-medium"
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Continue"}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
+
             {/* Help Link */}
-            <div className="text-center">
+            <div className="text-center mt-4">
               <Link
                 href="#"
-                className="text-sm text-muted-foreground hover:text-black transition-colors"
+                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
               >
                 Need help signing in?
               </Link>
             </div>
+
             {/* Register Link */}
             <div className="text-center mt-4">
               <Link
                 to="/register"
-                className="text-sm text-green-500 hover:text-green-700 transition-colors"
+                className="text-sm text-green-600 hover:text-green-700 transition-colors"
               >
                 Don't have an account? Register here
               </Link>
             </div>
           </form>
-        </div>
-      </div>
-      {/* Right Column - Gradient Background */}
-      <div className="hidden lg:block">
-        <div className="h-full bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(40deg,rgba(255,255,255,0.8)_0%,rgba(255,255,255,0)_30%)] opacity-20" />
-          <div className="absolute inset-0 p-12 flex flex-col justify-between text-white">
-            <div />
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold">Secure Payments</h2>
-              <p className="text-lg text-gray-300 max-w-md">
-                Fast, secure, and reliable payment services for all your
-                transactions
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
