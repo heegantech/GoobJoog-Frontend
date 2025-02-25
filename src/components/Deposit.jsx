@@ -11,7 +11,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const [depositData, setDepositData] = useState({
         wallet_name: method || "",
         amount: "",
-        phone_number: "616555736", // Default phone number as per your request
+        phone_number: "", // Initialize as empty string
     });
 
     const [logedUser, setLogedUser] = useState(null);
@@ -46,7 +46,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     };
 
     const handleCopyUSSD = () => {
-        const ussdCode = `*712*616555736*${depositData.amount}#`; // Updated USSD code
+        const ussdCode = `*712*${depositData.phone_number}*${depositData.amount}#`;
         navigator.clipboard.writeText(ussdCode).then(() => {
             setCopySuccess(true);
             setTimeout(() => {
@@ -92,7 +92,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
                 });
                 // Show the instructions and delay the redirection
                 setTimeout(() => {
-                    window.location.href = `tel:*712*616555736*${depositData.amount}#`; // Updated USSD code
+                    window.location.href = `tel:*712*${depositData.phone_number}*${depositData.amount}#`;
                 }, 3000); // Delay redirection for 3 seconds (you can adjust this delay)
             } else {
                 throw new Error(responseData.message || "Deposit failed");
@@ -120,6 +120,14 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
             const data = await response.json();
             console.log(data);
             setLogedUser(data);
+            
+            // Set the phone number from user data
+            if (data.phone_number) {
+                setDepositData(prevData => ({
+                    ...prevData,
+                    phone_number: data.phone_number.replace('+252', '') // Remove the country code if present
+                }));
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -127,7 +135,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
 
     useEffect(() => {
         userMe();
-    }, [logedUser]);
+    }, []);
 
     if (method !== "evcplus") {
         return (
@@ -156,12 +164,10 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
                             id="amount"
                             name="amount"
                             value={depositData.amount}
-                            min="0"
-                            step="0.01"
+                            onChange={handleInputChange}
                             required
                             className="block w-full pl-7 pr-12 py-2 border border-green-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
                             placeholder="0.00"
-                            onChange={handleInputChange}
                         />
                     </div>
                 </div>
@@ -204,37 +210,35 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
                         <p className="text-red-500 text-xs mt-1">Phone number must be exactly 9 digits long</p>
                     )}
                 </div>
+                <button
+                    type="submit"
+                    className="w-full bg-primary-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-primary-700 transition duration-300"
+                >
+                    Deposit
+                </button>
+            </form>
 
-                {/* Instructions section */}
-                {showInstructions && (
-                    <div className="mb-4 p-4 border bg-gray-50 rounded-md">
-                        <h3 className="text-sm font-semibold text-primary-700 mb-2">
-                            Instructions
-                        </h3>
-                        <p className="text-sm text-primary-600">
-                            To make a deposit, please use the USSD code below:
-                            <br />
-                            <strong>*712*616555736*{depositData.amount}#</strong>
-                        </p>
+            {showInstructions && (
+                <div className="mt-6 bg-primary-50 border border-primary-200 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-primary-800 mb-2">
+                        To finish deposit, please follow the payment instructions:
+                    </h3>
+                    <div className="flex items-center justify-between bg-white p-3 rounded-md">
+                        <span className="text-primary-700 font-medium">
+                            *712*{depositData.phone_number}*{depositData.amount}#
+                        </span>
                         <button
-                            type="button"
-                            className="mt-2 text-blue-500 text-sm"
                             onClick={handleCopyUSSD}
+                            className="text-primary-600 hover:text-primary-800"
                         >
-                            {copySuccess ? "Copied!" : "Copy USSD Code"}
+                            <i className="far fa-copy"></i>
                         </button>
                     </div>
-                )}
-
-                <div className="flex gap-4">
-                    <button
-                        type="submit"
-                        className="w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-green-700 transition duration-300"
-                    >
-                        Deposit
-                    </button>
+                    {copySuccess && (
+                        <p className="text-green-600 mt-2">Copied to clipboard!</p>
+                    )}
                 </div>
-            </form>
+            )}
         </div>
     );
 };
