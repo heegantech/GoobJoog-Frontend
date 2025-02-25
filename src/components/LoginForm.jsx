@@ -51,7 +51,7 @@ const Login = () => {
           {/* Top Rounded Circle Image */}
           <div className="flex justify-center mb-6">
             <img
-              src="https://via.placeholder.com/150" // Replace with your image URL
+              src="https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg" // Replace with your image URL
               alt="Logo"
               className="w-24 h-24 rounded-full object-cover"
             />
@@ -70,7 +70,7 @@ const Login = () => {
                 <div className="absolute inset-y-0 left-0 flex items-center pl-4">
                   <div className="flex items-center gap-2 pr-3 border-r">
                     <img
-                      src="https://techafricanews.com/wp-content/uploads/2022/11/african-businessman-talking-on-phone-sitting-at-la-2022-10-07-03-02-54-utc-small.jpg"
+                      src="https://flagcdn.com/w40/so.png"
                       width={22}
                       height={16}
                       alt="Somalia flag"
