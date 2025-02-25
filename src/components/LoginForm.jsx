@@ -39,9 +39,9 @@ const Login = () => {
         }
       );
 
-      const data = await response.json();
+      const data = response.status === 204 ? {} : await response.json();
       console.log(data);
-      if (!response.ok) throw new Error(data.detail);
+      if (!response.ok) throw new Error(data.detail || "Login failed");
 
       login(data);
       toast.success("Login successful.");
@@ -54,11 +54,11 @@ const Login = () => {
     }
   };
 
-  const validatePhoneNumber = (phone) => {
-    // Check if the phone number is 9 digits and either starts with 07 or 61
-    const phonePattern = /^(07\d{7}|61\d{7})$/;
-    return phonePattern.test(phone);
-  };
+  // const validatePhoneNumber = (phone) => {
+  //   // Check if the phone number is 9 digits and either starts with 07 or 61
+  //   const phonePattern = /^(07\d{7}|61\d{7})$/;
+  //   return phonePattern.test(phone);
+  // };
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
