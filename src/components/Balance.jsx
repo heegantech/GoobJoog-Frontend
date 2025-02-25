@@ -134,7 +134,7 @@ const Balance = () => {
         <div className="space-y-1">
           <p className="text-sm text-white">Available balance</p>
           <p className="text-4xl font-semibold tracking-tight">
-            {isVisible ? `$${balance.Balance > 0 ? balance.evcplus : 0.00}` : "••••••"}
+            {isVisible ? `$${balance.Balance > 0 ? balance.evcplus || "0.00" : "0.00"}` : "••••••"}
           </p>
         </div>
         <div className="flex items-center justify-between">
