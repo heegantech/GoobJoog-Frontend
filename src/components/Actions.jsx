@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { ArrowDown, ArrowUp, Bitcoin } from "lucide-react";
-import { FaCcVisa, FaExchangeAlt, FaMobileAlt } from "react-icons/fa";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { FaExchangeAlt } from "react-icons/fa";
 
 import {
   Drawer,
@@ -17,20 +19,33 @@ import { Link, useNavigate } from "react-router-dom";
 const Actions = () => {
   const [activeAction, setActiveAction] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
-
-  if (!paymentMethod === "evcplus") {
-    return <div>Payment method not found</div>;
-  }
-
+  const [isVisible, setIsVisible] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Handle form submission and redirect to wallet_name route
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible]);
+
   const handleActionSubmit = (event) => {
     event.preventDefault();
     if (paymentMethod) {
       navigate(`/wallet_name/${paymentMethod}`);
     }
   };
+
+  const PopUpAlert = () => (
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-64 bg-white rounded-md shadow-lg p-4 text-center animate-pop-up z-50">
+      <p className="text-sm font-medium text-gray-800">Coming Soon</p>
+      <p className="text-xs text-gray-600 mt-1">New feature on its way!</p>
+    </div>
+  );
 
   const renderPaymentMethods = () => (
     <div>
@@ -41,11 +56,12 @@ const Actions = () => {
             className="flex items-center text-black py-2 px-4 rounded-lg border-gray-400 border hover:bg-blue-600 transition duration-300"
             onClick={() => {
               setPaymentMethod(method);
-              navigate(
-                method === "evcplus"
-                  ? `/${activeAction.toLowerCase()}/${method}`
-                  : alert("Coming Soon")
-              );
+              if (method === "evcplus") {
+                navigate(`/${activeAction.toLowerCase()}/${method}`);
+              } else {
+                setIsVisible(true);
+                setIsDrawerOpen(false);
+              }
             }}
           >
             <div className="flex items-center space-x-2">
@@ -80,6 +96,7 @@ const Actions = () => {
 
   return (
     <div>
+      {isVisible && <PopUpAlert />}
       {/* Actions Section */}
       <section className="grid grid-cols-3 gap-4 mb-8">
         {["Deposit", "Withdraw", "Swap"].map((action) => (
@@ -95,11 +112,14 @@ const Actions = () => {
                 <span className="text-sm font-medium text-green-800">Swap</span>
               </Link>
             ) : (
-              <Drawer>
+              <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                 <DrawerTrigger asChild>
                   <button
                     className="mt-4 p-4 flex flex-col items-center justify-center group"
-                    onClick={() => setActiveAction(action)}
+                    onClick={() => {
+                      setActiveAction(action);
+                      setIsDrawerOpen(true);
+                    }}
                   >
                     <div className="bg-[#a8aae9] p-3 rounded-full mb-2 group-hover:bg-[#7173d6] transition duration-300">
                       {action === "Deposit" && (
