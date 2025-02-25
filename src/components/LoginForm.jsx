@@ -30,11 +30,14 @@ const Login = () => {
     // }
 
     try {
-      const response = await fetch("/auth/jwt/create/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(loginData),
-      });
+      const response = await fetch(
+        "https://api.barrowpay.com/auth/jwt/create/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(loginData),
+        }
+      );
 
       const data = await response.json();
       console.log(data);
