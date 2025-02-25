@@ -30,7 +30,7 @@ const Register = () => {
     setError(""); // Clear any previous error
 
     try {
-      const response = await fetch("https://api.barrowpay.com/auth/users/", {
+      const response = await fetch("/auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ const Register = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md px-4">
         <div className="text-start mb-8">
-          <h1 className="text-4xl font-bold text-green-600">Barrow Pay</h1>
+          <h1 className="text-4xl font-bold text-[#292a86]">Barrow Pay</h1>
           <p className="text-green-600 mt-2">Create your account below.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -75,7 +75,10 @@ const Register = () => {
                 placeholder="Enter your full name"
                 value={registerData.full_name}
                 onChange={(e) =>
-                  setRegisterData({ ...registerData, full_name: e.target.value })
+                  setRegisterData({
+                    ...registerData,
+                    full_name: e.target.value,
+                  })
                 }
               />
             </div>
