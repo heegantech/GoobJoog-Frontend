@@ -20,7 +20,7 @@ const Swap = () => {
       const access = userData?.access; // Safely access the access token
 
       if (!access) {
-        navigate("/login");
+        navigate("https://api.barrowpay.com/login");
         return;
       }
 
@@ -100,7 +100,7 @@ const Swap = () => {
       });
 
       const responseData = await response.json();
-      console.log("swap response",responseData)
+      console.log("swap response", responseData);
       if (response.ok) {
         navigate("/");
         setSwapData({
