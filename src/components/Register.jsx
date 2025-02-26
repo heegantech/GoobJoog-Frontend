@@ -30,7 +30,7 @@ const Register = () => {
     setError(""); // Clear any previous error
 
     try {
-      const response = await fetch("https://api.barrowpay.com/auth/users/", {
+      const response = await fetch("https://api.barrowpay.com//auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,22 +54,22 @@ const Register = () => {
       <div className="w-full max-w-md px-4">
         <div className="text-start mb-8">
           <h1 className="text-4xl font-bold text-[#292a86]">Barrow Pay</h1>
-          <p className="text-green-600 mt-2">Create your account below.</p>
+          <p className="text-base-500 mt-2">Create your account below.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
-              className="block text-green-700 text-sm font-bold mb-2"
+              className="block text-base-500 text-sm font-bold mb-2"
               htmlFor="fullName"
             >
               Full Name
             </label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                <User className="w-5 h-5 text-green-700" />
+                <User className="w-5 h-5 text-base-500" />
               </span>
               <input
-                className="appearance-none border bg-white border-green-300 rounded-lg w-full py-3 px-3 pl-10 text-primary-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="appearance-none border bg-white border-base-400 rounded-lg w-full py-3 px-3 pl-10 text-primary-700 leading-tight focus:outline-none focus:ring-2 focus:ring-base-500 focus:border-base-500"
                 id="fullName"
                 type="text"
                 placeholder="Enter your full name"
@@ -86,17 +86,26 @@ const Register = () => {
 
           <div>
             <label
-              className="block text-green-700 text-sm font-bold mb-2"
+              className="block text-base-500 text-sm font-bold mb-2"
               htmlFor="phoneNumber"
             >
               Phone Number
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                <Phone className="w-5 h-5 text-green-700" />
-              </span>
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+                <div className="flex items-center gap-2 pr-3 border-r">
+                  <img
+                    src="https://flagcdn.com/w40/so.png"
+                    width={22}
+                    height={16}
+                    alt="Somalia flag"
+                    className="rounded-sm"
+                  />
+                  <span className="text-sm font-medium">+252</span>
+                </div>
+              </div>
               <input
-                className="appearance-none border bg-white border-green-300 rounded-lg w-full py-3 px-3 pl-10 text-primary-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="appearance-none border bg-white border-base-400 rounded-lg w-full py-3 px-3  text-primary-700 leading-tight focus:outline-none focus:ring-2 focus:ring-base-500 focus:border-base-500 pl-24"
                 id="phoneNumber"
                 type="tel"
                 placeholder="Enter your phone number"
@@ -114,17 +123,17 @@ const Register = () => {
 
           <div>
             <label
-              className="block text-green-700 text-sm font-bold mb-2"
+              className="block text-base-500 text-sm font-bold mb-2"
               htmlFor="password"
             >
               Password
             </label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                <Lock className="w-5 h-5 text-green-700" />
+                <Lock className="w-5 h-5 text-base-500" />
               </span>
               <input
-                className="appearance-none bg-white border border-green-300 rounded-lg w-full py-3 px-3 pl-10 text-primary-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="appearance-none bg-white border border-base-400  rounded-lg w-full py-3 px-3 pl-10 text-primary-700 leading-tight focus:outline-none focus:ring-2 focus:ring-base-500 focus:border-base-500"
                 id="password"
                 type="password"
                 placeholder="Enter your password"
@@ -138,7 +147,7 @@ const Register = () => {
 
           <div>
             <button
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none transition duration-300"
+              className="w-full bg-base-500 hover:bg-base-400  text-white font-bold py-3 px-4 rounded-lg focus:outline-none transition duration-300"
               type="submit"
             >
               Sign Up
