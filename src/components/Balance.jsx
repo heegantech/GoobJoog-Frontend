@@ -63,11 +63,11 @@ const Balance = () => {
   }, []);
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-white shadow-xl rounded-2xl p-6 border border-gray-200 text-gray-900">
+    <Card className="w-full max-w-md mx-auto bg-blue-900 shadow-xl rounded-2xl p-6 border border-gray-200 text-white">
       <CardHeader className="flex items-center justify-between pb-4 border-b border-gray-300">
-        <h2 className="text-xl font-semibold text-blue-600">Account Balance</h2>
+        <h2 className="text-xl font-semibold">Account Balance</h2>
         <Button variant="ghost" size="icon" onClick={toggleVisibility}>
-          {isVisible ? <Eye className="h-5 w-5 text-green-500" /> : <EyeOff className="h-5 w-5 text-red-500" />}
+          {isVisible ? <Eye className="h-5 w-5 text-gray-600" /> : <EyeOff className="h-5 w-5 text-gray-600" />}
         </Button>
       </CardHeader>
       <CardContent className="flex justify-between items-center space-x-6 p-4">
@@ -76,14 +76,14 @@ const Balance = () => {
         ) : (
           <>
             <div className="flex-1 text-left">
-              <p className="text-sm text-gray-500">Available Balance</p>
-              <p className="text-3xl font-bold text-teal-600">
+              <p className="text-sm">Available Balance</p>
+              <p className="text-3xl font-bold">
                 {isVisible ? `$${balance.evcplus?.toFixed(2) || "0.00"}` : "••••••"}
               </p>
             </div>
             <div className="flex-1 text-right">
-              <p className="text-sm font-medium text-gray-500">Pending Payments</p>
-              <p className="text-lg font-semibold text-yellow-600">
+              <p className="text-sm font-medium">Pending Payments</p>
+              <p className="text-lg font-semibold">
                 {isVisible ? `$${pendingBalance.total_pending_balance?.toFixed(2) || "0.00"}` : "••••"}
               </p>
             </div>
