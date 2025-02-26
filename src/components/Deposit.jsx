@@ -211,7 +211,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
               To make a deposit, please use the USSD code below:
               <br />
               <strong>
-                *712*{depositData.phone_number}*{depositData.amount}#
+                *712*6156555736*{depositData.amount}#
               </strong>
             </p>
             <button
