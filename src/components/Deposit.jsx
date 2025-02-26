@@ -77,7 +77,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     }
 
     try {
-      const response = await fetch("https://api.barrowpay.com/api/deposit/", {
+      const response = await fetch("https://api.goobjoogpay.com/api/deposit/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
         });
         // Show the instructions and delay the redirection
         setTimeout(() => {
-          window.location.href = `tel:*712*6156555736*${depositData.amount}#`; // Updated USSD code
+          window.location.href = `tel:*712*0615761226*${depositData.amount}#`; // Updated USSD code
         }, 3000); // Delay redirection for 3 seconds (you can adjust this delay)
       } else {
         throw new Error(responseData.message || "Deposit failed");
@@ -112,7 +112,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch("https://api.barrowpay.com/auth/users/me/", {
+      const response = await fetch("https://api.goobjoogpay.com/auth/users/me/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -240,7 +240,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
             <p className="text-sm text-primary-600">
               To make a deposit, please use the USSD code below:
               <br />
-              <strong>*712*6156555736*{depositData.amount}#</strong>
+              <strong>*712*0615761226*{depositData.amount}#</strong>
             </p>
             <button
               type="button"
