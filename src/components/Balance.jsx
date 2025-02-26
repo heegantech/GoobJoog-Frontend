@@ -22,7 +22,7 @@ const Balance = () => {
     }
 
     try {
-      const response = await fetch("https://api.barrowpay.com/api/balance/", {
+      const response = await fetch("https://api.goobjoogpay.com/api/balance/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -48,7 +48,7 @@ const Balance = () => {
     const access = userData.access;
     try {
       const response = await fetch(
-        "https://api.barrowpay.com/api/pending-payments/",
+        "https://api.goobjoogpay.com/api/pending-payments/",
         {
           method: "GET",
           headers: {
