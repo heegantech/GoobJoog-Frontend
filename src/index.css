@@ -60,6 +60,9 @@
 }
 
 @theme inline {
+  --color-base-300: #d1d2f0;
+  --color-base-400: #6b6c9e;
+  --color-base-500: #292a86;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
