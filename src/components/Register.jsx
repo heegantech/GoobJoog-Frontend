@@ -78,14 +78,28 @@ const Register = () => {
             <label className="block text-sm font-bold mb-2" htmlFor="phoneNumber">
               Phone Number
             </label>
-            <input
-              className="border bg-white rounded-lg w-full py-3 px-3 text-primary-700 focus:ring-2 focus:ring-base-500"
-              id="phoneNumber"
-              type="tel"
-              placeholder="Enter your phone number"
-              value={registerData.phone_number}
-              onChange={(e) => setRegisterData({ ...registerData, phone_number: e.target.value })}
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+                <div className="flex items-center gap-2 pr-3 border-r">
+                  <img
+                    src="https://flagcdn.com/w40/so.png"
+                    width={22}
+                    height={16}
+                    alt="Somalia flag"
+                    className="rounded-sm"
+                  />
+                  <span className="text-sm font-medium">+252</span>
+                </div>
+              </div>
+              <input
+                className="border bg-white rounded-lg w-full py-3 px-3 pl-24 text-primary-700 focus:ring-2 focus:ring-base-500"
+                id="phoneNumber"
+                type="tel"
+                placeholder="Enter your phone number"
+                value={registerData.phone_number}
+                onChange={(e) => setRegisterData({ ...registerData, phone_number: e.target.value })}
+              />
+            </div>
             {error && <p className="text-red-600 text-sm">{error}</p>}
           </div>
 
