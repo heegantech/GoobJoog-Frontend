@@ -66,7 +66,7 @@ const Balance = () => {
 
   if (loading) {
     return (
-      <Card className="w-full bg-gray-800 text-white animate-pulse">
+      <Card className="w-full bg-gray-800 text-white animate-pulse rounded-xl shadow-xl">
         <CardContent className="p-6">
           <div className="h-6 bg-gray-600 rounded w-32 mb-4"></div>
           <div className="h-10 bg-gray-600 rounded w-48"></div>
@@ -76,29 +76,29 @@ const Balance = () => {
   }
 
   return (
-    <Card className="w-full bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-xl shadow-lg p-4">
+    <Card className="w-full bg-[#ffa702] text-white rounded-2xl shadow-xl p-6">
       <CardHeader className="flex items-center justify-between">
-        <div className="flex items-center bg-indigo-500 px-4 py-1 rounded-full">
-          <span className="text-lg font-semibold">$</span>
+        <div className="flex items-center bg-white px-4 py-2 rounded-full text-[#ffa702] font-semibold shadow-md">
+          <span className="text-lg">$</span>
           <span className="ml-2 text-sm">US Dollar</span>
         </div>
         <Button variant="ghost" size="icon" className="text-white" onClick={toggleVisibility}>
-          {isVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+          {isVisible ? <Eye className="h-6 w-6" /> : <EyeOff className="h-6 w-6" />}
         </Button>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="text-center">
+      <CardContent className="space-y-6 text-center">
+        <div>
           <p className="text-sm text-gray-200">Available Balance</p>
-          <p className="text-4xl font-bold">
+          <p className="text-5xl font-bold">
             {isVisible ? `$${balance.evcplus.toFixed(2)}` : "••••••"}
           </p>
         </div>
-        <div className="flex items-center justify-between text-gray-300">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between bg-white bg-opacity-20 p-4 rounded-xl shadow-md">
+          <div className="flex items-center gap-2 text-white">
             <Clock className="h-5 w-5" />
             <span>Pending Money</span>
           </div>
-          <span className="text-white font-medium">
+          <span className="text-white font-medium text-lg">
             {isVisible ? `$${pendingBalance.total_pending_balance.toFixed(2)}` : "••••"}
           </span>
         </div>
