@@ -9,7 +9,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { RefreshCw } from "lucide-react";
 
@@ -56,14 +56,11 @@ const RecentTransactions = () => {
     // }
 
     try {
-      const response = await fetch(
-        "https://api.barrowpay.com/api/transactions/",
-        {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const response = await fetch("https://api.barrowpay.com//api/transactions/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -80,7 +77,7 @@ const RecentTransactions = () => {
 
   const fetchSwapRates = async () => {
     try {
-      const response = await fetch("https://api.barrowpay.com/api/swap-rates/");
+      const response = await fetch("/api/swap-rates/");
       const data = await response.json();
       setSwapRates(data);
     } catch (error) {
@@ -95,9 +92,14 @@ const RecentTransactions = () => {
 
   return (
     <section className="mb-8">
-      <h2 className="text-xl font-semibold mb-4 text-[#292a86]">
-        Recent Transactions
-      </h2>
+      <div className="flex justify-between">
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Recent Transactions
+        </h2>
+        <Link to="/transactions" className="text-sm font-semibold">
+          View All
+        </Link>
+      </div>
 
       <div className="space-y-4">
         {isLoading ? (
@@ -114,17 +116,17 @@ const RecentTransactions = () => {
             <Drawer key={transaction.id}>
               <DrawerTrigger className="w-full">
                 <div
-                  className="flex items-center justify-between p-3 border border-green-100 rounded-xl transition duration-300 cursor-pointer hover:bg-green-50"
+                  className="flex mt-5 items-center justify-between p-3 border border-primary-100 rounded-xl transition duration-300 cursor-pointer hover:bg-primary-50"
                   onClick={() => setModalData(transaction)}
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 ">
                     <img
                       src={
                         transaction.wallet === "evcplus"
                           ? "evc-plus.png"
                           : "/premier-wallet.png"
                       }
-                      className="w-20"
+                      className="w-20 bg-primary-100 p-2 border rounded-xl"
                       alt="Transaction"
                     />
 
@@ -213,7 +215,7 @@ const RecentTransactions = () => {
                           )}
                         </p>
                       </div>
-                      {modalData.type === "Deposit" &&
+                      {/* {modalData.type === "Deposit" &&
                       modalData.status === "Pending" ? (
                         <Button
                           onClick={handleRecheck}
@@ -222,7 +224,7 @@ const RecentTransactions = () => {
                           <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5" />
                           <span>Recheck</span>
                         </Button>
-                      ) : null}
+                      ) : null} */}
                     </>
                   )}
                 </DrawerDescription>
