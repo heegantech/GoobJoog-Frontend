@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Clock, Eye, EyeOff } from "lucide-react";
 
 const Balance = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [balance, setBalance] = useState({ evcplus: 0 }); // Default value
   const [loading, setLoading] = useState(true);
   const [pendingBalance, setPendingPayment] = useState({
@@ -22,7 +22,7 @@ const Balance = () => {
     }
 
     try {
-      const response = await fetch("https://api.barrowpay.com/api/balance/", {
+      const response = await fetch("https://api.barrowpay.com//api/balance/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -47,7 +47,7 @@ const Balance = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch("https://api.barrowpay.com/api/pending-payments/", {
+      const response = await fetch("https://api.barrowpay.com//api/pending-payments/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -81,7 +81,7 @@ const Balance = () => {
   }, []);
 
   const renderWalletBalanceSkeleton = () => (
-    <Card className="w-full bg-[#292a86] text-white">
+    <Card className="w-full bg-base-500 text-white">
       <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center gap-2">
           <div className="bg-gray-300 w-20 h-4 rounded-md animate-pulse"></div>
@@ -131,7 +131,9 @@ const Balance = () => {
         <div className="space-y-1">
           <p className="text-sm text-white">Available balance</p>
           <p className="text-4xl font-semibold tracking-tight">
-            {isVisible ? `$${balance.Balance > 0 ? balance.evcplus : "0.00"}` : "••••••"}
+            {isVisible
+              ? `$${balance.evcplus > 0 ? balance.evcplus.toFixed(2) : "0.00"}`
+              : "••••••"}
           </p>
         </div>
         <div className="flex items-center justify-between">
