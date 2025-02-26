@@ -20,6 +20,14 @@ function App() {
       <Toaster />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route
+          path="*"
+          element={
+            <div className="flex items-center justify-center h-screen">
+              <h1 className="text-3xl text-gray-800">404 | Not Found</h1>
+            </div>
+          }
+        />
         <Route path="/register" element={<Register />} />
         <Route element={<PrivateRoutes />}>
           <Route
