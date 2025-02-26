@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useUser";
 import toast from "react-hot-toast";
@@ -16,8 +16,15 @@ const Login = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/"); // Redirect to dashboard or home page
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,21 +37,18 @@ const Login = () => {
     // }
 
     try {
-      const response = await fetch(
-        "https://api.barrowpay.com/auth/jwt/create/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(loginData),
-        }
-      );
+      const response = await fetch("https://api.barrowpay.com//auth/jwt/create/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
+      });
 
       const data = response.status === 204 ? {} : await response.json();
       console.log(data);
       if (!response.ok) throw new Error(data.detail || "Login failed");
 
       login(data);
-      toast.success("Login successful.");
+      toast.success("Login successfully.");
       navigate("/");
     } catch (error) {
       console.error("Error:", error);
@@ -65,8 +69,13 @@ const Login = () => {
       {/* Left Column - Login Form */}
       <div className="flex items-center justify-center p-6 lg:p-8">
         <div className="w-full max-w-sm space-y-8">
+          {/* Logo */}
+
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-[#292a86] tracking-tight">
+            <div className="text-center">
+              <img src="logo.png" className="w-14 h-14" alt="" />
+            </div>
+            <h1 className="text-4xl font-bold text-base-500 tracking-tight">
               Welcome back
             </h1>
             <p className="text-lg text-muted-foreground">Sign in to continue</p>
@@ -116,7 +125,7 @@ const Login = () => {
             {/* Login Button */}
             <Button
               type="submit"
-              className="w-full bg-[#292a86] hover:bg-[#8b8dce] text-white h-12 text-base font-medium"
+              className="w-full bg-base-500 hover:bg-[#8b8dce] text-white h-12 text-base font-medium"
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Continue"}
