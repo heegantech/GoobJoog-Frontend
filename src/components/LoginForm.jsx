@@ -38,7 +38,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://api.barrowpay.com/auth/jwt/create/",
+        "https://api.goobjoogpay.com/auth/jwt/create/",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
