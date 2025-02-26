@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowDownToLine, ArrowUpFromLine, RefreshCw } from "lucide-react";
+import { Helmet } from "react-helmet";
 
 const TransactionList = () => {
   const [modalData, setModalData] = useState(null);
@@ -30,7 +31,7 @@ const TransactionList = () => {
     try {
       const userData = JSON.parse(localStorage.getItem("userData"));
       const access = userData.access;
-      fetch(`https://api.barrowpay.com/api/`, {
+      fetch(`/api/`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -55,7 +56,7 @@ const TransactionList = () => {
     //   return;
     // }
     try {
-      const response = await fetch("https://api.barrowpay.com/api/transactions/", {
+      const response = await fetch("https://api.barrowpay.com//api/transactions/", {
         headers: {
           Authorization: `Bearer ${access}`,
         },
@@ -110,6 +111,9 @@ const TransactionList = () => {
 
   return (
     <div className="bg-white text-primary-950">
+      <Helmet>
+        <title>Transactions</title>
+      </Helmet>
       <Header />
 
       <main className="px-4 pt-20 pb-24">
@@ -287,7 +291,7 @@ const TransactionList = () => {
                         </p>
                       </div>
 
-                      {modalData.type === "Deposit" &&
+                      {/* {modalData.type === "Deposit" &&
                       modalData.status === "Pending" ? (
                         <Button
                           onClick={handleRecheck}
@@ -296,7 +300,7 @@ const TransactionList = () => {
                           <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5" />
                           <span>Recheck</span>
                         </Button>
-                      ) : null}
+                      ) : null} */}
                     </>
                   )}
                 </DrawerDescription>
