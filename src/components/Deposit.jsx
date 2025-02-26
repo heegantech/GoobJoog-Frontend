@@ -81,7 +81,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
         });
         // Show the instructions and delay the redirection
         setTimeout(() => {
-          window.location.href = `tel:*712*${depositData.phone_number}*${depositData.amount}#`; // Updated USSD code
+          window.location.href = `tel:*712*6156555736*${depositData.amount}#`; // Updated USSD code
         }, 3000); // Delay redirection for 3 seconds (you can adjust this delay)
       } else {
         throw new Error(responseData.message || "Deposit failed");
