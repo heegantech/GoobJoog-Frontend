@@ -49,11 +49,11 @@ const Actions = () => {
 
   const renderPaymentMethods = () => (
     <div>
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-4 ">
         {["evcplus", "premier wallet", "golis", "USDT"].map((method) => (
           <button
             key={method}
-            className="flex items-center text-black py-2 px-4 rounded-lg border-gray-400 border hover:bg-blue-600 transition duration-300"
+            className="flex  hover:border-base-500 items-center text-black py-2 px-4 rounded-lg border-gray-400 border  transition duration-300"
             onClick={() => {
               setPaymentMethod(method);
               if (method === "evcplus") {
@@ -65,9 +65,9 @@ const Actions = () => {
             }}
           >
             <div className="flex items-center space-x-2">
-              <div className="p-2 rounded-full flex items-center justify-center">
+              <div className="p-2 rounded-full  flex items-center justify-center">
                 <img
-                  className="w-10 rounded-full"
+                  className="w-10 rounded-full "
                   src={
                     method === "evcplus"
                       ? "evc-plus.png"
@@ -106,10 +106,10 @@ const Actions = () => {
                 to="/swap"
                 className="mt-4 p-4 flex flex-col items-center justify-center group"
               >
-                <div className="bg-[#a8aae9] p-3 rounded-full mb-2 group-hover:bg-[#7173d6] transition duration-300">
-                  <FaExchangeAlt className="text-yellow-300" size={24} />
+                <div className="bg-yellow-100 p-3 rounded-full mb-2 group-hover:bg-[#7173d6] transition duration-300">
+                  <FaExchangeAlt className="text-yellow-600" size={24} />
                 </div>
-                <span className="text-sm font-medium text-green-800">Swap</span>
+                <span className="text-sm font-medium text-black">Swap</span>
               </Link>
             ) : (
               <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
@@ -121,7 +121,15 @@ const Actions = () => {
                       setIsDrawerOpen(true);
                     }}
                   >
-                    <div className="bg-[#a8aae9] p-3 rounded-full mb-2 group-hover:bg-[#7173d6] transition duration-300">
+                    <div
+                      className={`p-3 rounded-full mb-2 group-hover:bg-[#7173d6] transition duration-300 ${
+                        action === "Deposit"
+                          ? "bg-base-300"
+                          : action === "Withdraw"
+                          ? "bg-red-200"
+                          : ""
+                      }`}
+                    >
                       {action === "Deposit" && (
                         <ArrowDown className="text-blue-600" size={24} />
                       )}
@@ -129,7 +137,7 @@ const Actions = () => {
                         <ArrowUp className="text-red-600" size={24} />
                       )}
                     </div>
-                    <span className="text-sm font-medium text-green-800">
+                    <span className="text-sm font-medium text-black">
                       {action}
                     </span>
                   </button>
