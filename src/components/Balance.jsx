@@ -23,6 +23,7 @@ const Balance = () => {
 
       if (!response.ok) throw new Error("Failed to fetch balance");
       const data = await response.json();
+      if (typeof data.evcplus !== "number") throw new Error("Invalid response format");
       setBalance(data);
     } catch (error) {
       console.error("Error fetching balance:", error);
@@ -44,6 +45,7 @@ const Balance = () => {
 
       if (!response.ok) throw new Error("Failed to fetch pending payments");
       const data = await response.json();
+      if (typeof data.total_pending_balance !== "number") throw new Error("Invalid response format");
       setPendingPayment(data);
     } catch (error) {
       console.error("Error fetching pending payments:", error);
