@@ -164,79 +164,134 @@ const Swap = () => {
       : 0;
 
   return (
-
-    <div className="mt-20 px-5 max-w-lg mx-auto">
+    <div className="mt-20 px-5 h-[800px]">
       <Helmet>
         <title>Swap</title>
       </Helmet>
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Swap</h2>
-      <Card className="p-6 shadow-lg rounded-2xl">
-        <form onSubmit={handleSwap} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
-            <Select id="from_wallet" name="from_wallet" required onChange={handleChange}>
-              <SelectItem value="" disabled>Select a wallet</SelectItem>
-              <SelectItem value="evcplus">
-                <FaMoneyBillWave className="inline-block mr-2 text-green-500" /> EVC PLUS
-              </SelectItem>
-            </Select>
-          </div>
-          <div className="text-center">
-            <IoSwapHorizontal className="text-3xl text-gray-500" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
-            <Select id="to_wallet" name="to_wallet" required onChange={handleChange}>
-              <SelectItem value="" disabled>Select a wallet</SelectItem>
-              <SelectItem value="usdt">
-                <FaDollarSign className="inline-block mr-2 text-blue-500" /> USDT
-              </SelectItem>
-            </Select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Swap Address</label>
-            <Input type="text" id="swap_address" name="swap_address" required onChange={handleChange} placeholder="Enter swap address" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
-            <Input type="number" id="amount" name="amount" min="0" step="0.01" required onChange={handleChange} placeholder="0.00" />
-          </div>
-          {swapData.amount && (
-            <CardContent className="mt-6 bg-gray-50 p-4 rounded-xl">
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">Swap Summary</h3>
-              <div className="space-y-2 text-gray-600">
-                <div className="flex justify-between border-b pb-2">
-                  <span className="font-medium">From Wallet:</span>
-                  <span className="font-semibold">{swapData.from_wallet}</span>
-                </div>
-                <div className="flex justify-between border-b pb-2">
-                  <span className="font-medium">To Wallet:</span>
-                  <span className="font-semibold">{swapData.to_wallet.toUpperCase()}</span>
-                </div>
-                <div className="flex justify-between border-b pb-2">
-                  <span className="font-medium">Swap Address:</span>
-                  <span>{swapData.swap_address}</span>
-                </div>
-                <div className="flex justify-between border-b pb-2">
-                  <span className="font-medium">Amount:</span>
-                  <span>{swapData.amount}</span>
-                </div>
-                <div className="flex justify-between border-b pb-2">
-                  <span className="font-medium">Service Charge:</span>
-                  <span>{swapRate * 100}%</span>
-                </div>
-                <div className="flex justify-between font-bold text-green-700">
-                  <span>Total to Receive:</span>
-                  <span>${swapData.amount - swapData.amount * swapRate}</span>
-                </div>
+      <h2 className="text-xl font-semibold mb-2 text-base-500">Swap</h2>
+      <form onSubmit={handleSwap}>
+        <div className="mb-4">
+          <label
+            htmlFor="fromCurrency"
+            className="block text-sm font-medium text-base-500 mb-1"
+          >
+            From
+          </label>
+          <select
+            id="from_wallet"
+            name="from_wallet"
+            required
+            onChange={handleChange}
+            className="block w-full py-2 px-3 border border-base-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-base-500 focus:border-base-500"
+          >
+            <option value="">Select A wallet</option>
+            <option value="evcplus">EVC PLUS</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="toCurrency"
+            className="block text-sm font-medium text-base-500 mb-1"
+          >
+            To
+          </label>
+          <select
+            id="to_wallet"
+            name="to_wallet"
+            required
+            onChange={handleChange}
+            className="block w-full py-2 px-3 border border-base-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-base-500 focus:border-base-500"
+          >
+            <option value="">Select A wallet</option>
+            <option value="usdt">USDT</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="swapAddress"
+            className="block text-sm font-medium text-base-500 mb-1"
+          >
+            Swap Address
+          </label>
+          <input
+            type="text"
+            id="swap_address"
+            name="swap_address"
+            required
+            onChange={handleChange}
+            className="block w-full py-2 px-3 border border-base-400 rounded-md focus:ring-base-500 focus:border-base-500"
+            placeholder="Enter swap address"
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="swapAmount"
+            className="block text-sm font-medium text-base-500 mb-1"
+          >
+            Amount
+          </label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            min="0"
+            step="0.01"
+            onChange={handleChange}
+            required
+            className="block w-full py-2 px-3 border border-base-400 rounded-md focus:ring-base-500 focus:border-base-500"
+            placeholder="0.00"
+          />
+        </div>
+        {/* Display the swap summary when amount is entered */}
+        {swapData.amount && (
+          <div className="mt-6   rounded-md">
+            <h3 className="text-lg font-semibold text-base-500 mb-2">
+              Swap Summary
+            </h3>
+            <div className="space-y-2 ">
+              <div className="flex justify-between border-b border-dashed border-base-500 pb-2">
+                <span className="font-medium capitalize">From Wallet:</span>
+                <span className="capitalize font-semibold">
+                  {swapData.from_wallet}
+                </span>
               </div>
-            </CardContent>
-          )}
-          <Button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl text-lg font-semibold shadow-md">
-            Swap
-          </Button>
-        </form>
-      </Card>
+              <div className="flex justify-between border-b border-dashed border-base-500 pb-2">
+                <span className="font-medium ">To Wallet:</span>
+                <span className="capitalize font-semibold">
+                  {swapData.to_wallet.toUpperCase()}
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-dashed border-base-500 pb-2">
+                <span className="font-medium">Swap Address:</span>
+                <span>{swapData.swap_address}</span>
+              </div>
+              <div className="flex justify-between border-b border-dashed border-base-500 pb-2">
+                <span className="font-medium">Amount:</span>
+                <span>{swapData.amount}</span>
+              </div>
+              <div className="flex justify-between border-b border-dashed border-base-500 pb-2">
+                <span className="font-medium">Service Charge:</span>
+                <span>{swapRate * 100}%</span>
+              </div>
+              <div className="flex justify-between font-bold text-green-700">
+                <span>Total to Receive:</span>
+                <span>${swapData.amount - swapData.amount * swapRate}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Display the swap rate
+        {swapRate && (
+          <p className="text-sm text-gray-500 mt-4">Swap Rate: {swapRate}</p>
+        )} */}
+        <button
+          type="submit"
+          className="w-full bg-base-500 text-white font-semibold py-3 px-4 rounded-xl hover:bg-base-500 transition duration-300 mt-4"
+        >
+          Swap
+        </button>
+      </form>
     </div>
   );
 };
