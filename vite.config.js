@@ -14,12 +14,12 @@ export default defineConfig({
   server: {
     proxy: {
       "/auth/": {
-        target: "https://api.barrowpay.com/",
+        target: "https://api.barrowpay.com",
         changeOrigin: true,
         secure: false, // Optional: Use if the target uses a self-signed certificate
       },
       "/api/": {
-        target: "https://api.barrowpay.com/",
+        target: "https://api.barrowpay.com",
         changeOrigin: true,
         secure: false, // Optional: Use if the target uses a self-signed certificate
       },

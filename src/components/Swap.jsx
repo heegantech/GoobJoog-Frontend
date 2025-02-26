@@ -114,7 +114,7 @@ const Swap = () => {
 
     try {
       // Before sending the WhatsApp message, fetch the swap
-      const response = await fetch("https://api.barrowpay.com//api/swap/", {
+      const response = await fetch("https://api.barrowpay.com/api/swap/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

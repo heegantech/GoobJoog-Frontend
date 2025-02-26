@@ -22,7 +22,7 @@ const Balance = () => {
     }
 
     try {
-      const response = await fetch("https://api.barrowpay.com//api/balance/", {
+      const response = await fetch("https://api.barrowpay.com/api/balance/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -47,12 +47,15 @@ const Balance = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch("https://api.barrowpay.com//api/pending-payments/", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
+      const response = await fetch(
+        "https://api.barrowpay.com/api/pending-payments/",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

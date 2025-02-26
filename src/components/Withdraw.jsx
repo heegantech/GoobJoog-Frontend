@@ -52,7 +52,7 @@ const Withdraw = () => {
     }
 
     try {
-      const response = await fetch("https://api.barrowpay.com//api/payout/", {
+      const response = await fetch("https://api.barrowpay.com/api/payout/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

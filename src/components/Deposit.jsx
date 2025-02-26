@@ -77,7 +77,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     }
 
     try {
-      const response = await fetch("https://api.barrowpay.com//api/deposit/", {
+      const response = await fetch("https://api.barrowpay.com/api/deposit/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,15 +112,12 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch(
-        "https://api.barrowpay.com//auth/users/me/",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const response = await fetch("https://api.barrowpay.com/auth/users/me/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
