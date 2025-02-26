@@ -57,7 +57,7 @@ const TransactionList = () => {
     // }
     try {
       const response = await fetch(
-        "https://api.barrowpay.com/api/transactions/",
+        "https://api.goobjoogpay.com/api/transactions/",
         {
           headers: {
             Authorization: `Bearer ${access}`,
