@@ -5,147 +5,99 @@ import { Clock, Eye, EyeOff } from "lucide-react";
 
 const Balance = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [balance, setBalance] = useState({ evcplus: 0 }); // Default value
+  const [balance, setBalance] = useState({ evcplus: 0 });
   const [loading, setLoading] = useState(true);
-  const [pendingBalance, setPendingPayment] = useState({
-    total_pending_balance: 0,
-  }); // Default value
+  const [pendingBalance, setPendingPayment] = useState({ total_pending_balance: 0 });
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const fetchBalance = async () => {
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const access = userData.access;
-
-    if (!access) {
-      navigate("/login");
-      return;
-    }
-
     try {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      if (!userData?.access) return;
+      
       const response = await fetch("https://api.goobjoogpay.com/api/balance/", {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
+        headers: { Authorization: `Bearer ${userData.access}` },
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Failed to fetch balance");
       const data = await response.json();
       setBalance(data);
-      setLoading(false);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error fetching balance:", error);
+      setBalance({ evcplus: 0 });
+    } finally {
       setLoading(false);
-      setBalance({ evcplus: 0 }); // Set default value on error
     }
   };
 
-  // Fetch pending payments from the API
-  const pendingPayment = async () => {
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const access = userData.access;
+  const fetchPendingPayments = async () => {
     try {
-      const response = await fetch(
-        "https://api.goobjoogpay.com/api/pending-payments/",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      if (!userData?.access) return;
+      
+      const response = await fetch("https://api.goobjoogpay.com/api/pending-payments/", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${userData.access}` },
+      });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Failed to fetch pending payments");
       const data = await response.json();
       setPendingPayment(data);
-      setLoading(false);
     } catch (error) {
-      console.error("Error:", error);
-      setLoading(false);
-      setPendingPayment({ total_pending_balance: 0 }); // Set default value on error
+      console.error("Error fetching pending payments:", error);
+      setPendingPayment({ total_pending_balance: 0 });
     }
   };
 
-  // Fetch balance and pending payments on component mount
   useEffect(() => {
-    pendingPayment();
     fetchBalance();
-    const balanceInterval = setInterval(fetchBalance, 60000); // Refresh balance every 1 minute
-    const paymentInterval = setInterval(pendingPayment, 60000); // Refresh pending payments every 1 minute
+    fetchPendingPayments();
+    const interval = setInterval(() => {
+      fetchBalance();
+      fetchPendingPayments();
+    }, 60000);
 
-    return () => {
-      clearInterval(balanceInterval);
-      clearInterval(paymentInterval);
-    };
+    return () => clearInterval(interval);
   }, []);
 
-  const renderWalletBalanceSkeleton = () => (
-    <Card className="w-full bg-base-500 text-white">
-      <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="bg-gray-300 w-20 h-4 rounded-md animate-pulse"></div>
-        </div>
-        <div className="bg-gray-300 w-6 h-6 rounded-full animate-pulse"></div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-1">
-          <div className="bg-gray-300 w-24 h-4 rounded-md animate-pulse"></div>
-          <div className="bg-gray-300 w-32 h-8 rounded-md animate-pulse"></div>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-gray-300 w-6 h-6 rounded-full animate-pulse"></div>
-            <div className="bg-gray-300 w-20 h-4 rounded-md animate-pulse"></div>
-          </div>
-          <div className="bg-gray-300 w-16 h-4 rounded-md animate-pulse"></div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   if (loading) {
-    return <div>{renderWalletBalanceSkeleton()}</div>;
+    return (
+      <Card className="w-full bg-gray-800 text-white animate-pulse">
+        <CardContent className="p-6">
+          <div className="h-6 bg-gray-600 rounded w-32 mb-4"></div>
+          <div className="h-10 bg-gray-600 rounded w-48"></div>
+        </CardContent>
+      </Card>
+    );
   }
+
   return (
-    <Card className="w-full bg-[#292a86] text-white">
-      <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-        <div className="flex items-center gap-2 border px-4 py-1 bg-[#7b7ce6] rounded-full border-[#292a86] text-black">
-          <span className="text-lg text-black uppercase">$</span>
-          <span className="text-base font-medium">US Dollar</span>
+    <Card className="w-full bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-xl shadow-lg p-4">
+      <CardHeader className="flex items-center justify-between">
+        <div className="flex items-center bg-indigo-500 px-4 py-1 rounded-full">
+          <span className="text-lg font-semibold">$</span>
+          <span className="ml-2 text-sm">US Dollar</span>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-white hover:text-white"
-          onClick={toggleVisibility}
-        >
-          {isVisible ? (
-            <Eye className="h-5 w-5" />
-          ) : (
-            <EyeOff className="h-5 w-5" />
-          )}
+        <Button variant="ghost" size="icon" className="text-white" onClick={toggleVisibility}>
+          {isVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
         </Button>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-1">
-          <p className="text-sm text-white">Available balance</p>
-          <p className="text-4xl font-semibold tracking-tight">
-            {isVisible
-              ? `$${balance.evcplus > 0 ? balance.evcplus.toFixed(2) : "0.00"}`
-              : "••••••"}
+        <div className="text-center">
+          <p className="text-sm text-gray-200">Available Balance</p>
+          <p className="text-4xl font-bold">
+            {isVisible ? `$${balance.evcplus.toFixed(2)}` : "••••••"}
           </p>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-white">
+        <div className="flex items-center justify-between text-gray-300">
+          <div className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            <span className="text-sm">Pending money</span>
+            <span>Pending Money</span>
           </div>
-          <span className="text-sm font-medium">
-            {isVisible ? `$${pendingBalance?.total_pending_balance}` : "••••"}
+          <span className="text-white font-medium">
+            {isVisible ? `$${pendingBalance.total_pending_balance.toFixed(2)}` : "••••"}
           </span>
         </div>
       </CardContent>
