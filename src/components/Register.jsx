@@ -30,7 +30,7 @@ const Register = () => {
     setError(""); // Clear any previous error
 
     try {
-      const response = await fetch("https://api.barrowpay.com/auth/users/", {
+      const response = await fetch("https://api.goobjoogpay.com/auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
