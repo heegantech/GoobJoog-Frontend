@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Helmet } from "react-helmet";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => (
@@ -68,6 +69,9 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen mt-15 p-2">
+      <Helmet>
+        <title>Profile</title>
+      </Helmet>
       <Card className=" w-full">
         <CardHeader className="text-center">
           {isLoading ? (
@@ -105,7 +109,7 @@ export default function ProfilePage() {
         <CardContent className="space-y-4">
           <MenuItem
             icon={<Wallet className="h-5 w-5" />}
-            label="View Active Transaction"
+            label="Request Statement"
           />
           <MenuItem icon={<Edit2 className="h-5 w-5" />} label="Edit Profile" />
           <MenuItem
@@ -121,6 +125,7 @@ export default function ProfilePage() {
             className="text-red-500"
             onClick={handleLogout}
           />
+          <hr />
         </CardContent>
       </Card>
     </div>
