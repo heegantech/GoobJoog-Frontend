@@ -254,7 +254,7 @@ const TransactionList = () => {
                         <p className="text-primary-800 text-lg font-semibold">
                           Type
                         </p>
-                        <p className="font-medium text-lg ">{modalData.type}</p>
+                        <p className="font-medium text-lg ">{modalData.transaction_type}</p>
                       </div>
                       <div className="flex items-center justify-between mb-4">
                         <p className="text-primary-800 text-lg font-semibold">
