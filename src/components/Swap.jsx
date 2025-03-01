@@ -33,7 +33,7 @@ const Swap = () => {
       }
 
       try {
-        const response = await fetch("/api/swap-rate/", {
+        const response = await fetch("https://api.goobjoogpay.com/api/swap-rate/", {
           method: "POST", // Changed to POST request
           headers: {
             "Content-Type": "application/json", // Correct content type for POST
