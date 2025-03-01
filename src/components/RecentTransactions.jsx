@@ -180,7 +180,7 @@ const RecentTransactions = () => {
                       </div>
                       <div className="flex items-center justify-between mb-4">
                         <p className="text-black text-lg font-semibold">Type</p>
-                        <p className="font-medium text-lg ">{modalData.transaction_type}</p>
+                        <p className="font-medium text-lg ">{modalData.type}</p>
                       </div>
                       <div className="flex items-center justify-between mb-4">
                         <p className="text-black text-lg font-semibold">
