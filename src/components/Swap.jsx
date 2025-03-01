@@ -44,7 +44,7 @@ const Swap = () => {
             to_wallet: to_wallet,
           }),
         });
-
+        console.log("response from swap rate",response)
         // Check if the response is ok
         if (!response.ok) {
           throw new Error("Failed to fetch swap rate");
