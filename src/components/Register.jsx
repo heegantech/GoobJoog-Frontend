@@ -8,7 +8,7 @@ const Register = () => {
     phone_number: "",
     password: "",
   });
-  
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://api.goobjoogpay.com/auth/users/", {
+      const response = await fetch("https://api.goobjoogpay.com//auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,13 +69,21 @@ const Register = () => {
                 type="text"
                 placeholder="Enter your full name"
                 value={registerData.full_name}
-                onChange={(e) => setRegisterData({ ...registerData, full_name: e.target.value })}
+                onChange={(e) =>
+                  setRegisterData({
+                    ...registerData,
+                    full_name: e.target.value,
+                  })
+                }
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="phoneNumber">
+            <label
+              className="block text-sm font-bold mb-2"
+              htmlFor="phoneNumber"
+            >
               Phone Number
             </label>
             <div className="relative">
@@ -97,7 +105,12 @@ const Register = () => {
                 type="tel"
                 placeholder="Enter your phone number"
                 value={registerData.phone_number}
-                onChange={(e) => setRegisterData({ ...registerData, phone_number: e.target.value })}
+                onChange={(e) =>
+                  setRegisterData({
+                    ...registerData,
+                    phone_number: e.target.value,
+                  })
+                }
               />
             </div>
             {error && <p className="text-red-600 text-sm">{error}</p>}
@@ -117,7 +130,9 @@ const Register = () => {
                 type="password"
                 placeholder="Enter your password"
                 value={registerData.password}
-                onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+                onChange={(e) =>
+                  setRegisterData({ ...registerData, password: e.target.value })
+                }
               />
             </div>
           </div>
@@ -133,7 +148,10 @@ const Register = () => {
           </div>
         </form>
         <p className="text-center text-primary-600 text-sm mt-6">
-          Already have an account? <Link to="/login" className="font-bold hover:text-primary-700">Sign in</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="font-bold hover:text-primary-700">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>

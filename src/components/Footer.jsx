@@ -8,7 +8,7 @@ const Footer = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-black shadow-xl border-t border-gray-300 dark:border-gray-700 p-2">
+    <nav className="max-w-md w-full mx-auto fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-black shadow-xl border-t border-gray-300 dark:border-gray-700 p-2">
       <div className="flex justify-around items-center h-14 px-6">
         <Link
           to="/transactions"

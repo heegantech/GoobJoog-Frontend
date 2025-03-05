@@ -77,14 +77,17 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     }
 
     try {
-      const response = await fetch("https://api.goobjoogpay.com/api/deposit/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access}`,
-        },
-        body: JSON.stringify(depositData),
-      });
+      const response = await fetch(
+        "https://api.goobjoogpay.com//api/deposit/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access}`,
+          },
+          body: JSON.stringify(depositData),
+        }
+      );
 
       const responseData = await response.json();
 
@@ -112,12 +115,15 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch("https://api.goobjoogpay.com/auth/users/me/", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
+      const response = await fetch(
+        "https://api.goobjoogpay.com//auth/users/me/",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -143,20 +149,12 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     }
   }, [logedUser]);
 
-  if (method !== "evcplus") {
-    return (
-      <div className="mt-20 px-5">
-        <h2 className="text-xl font-semibold text-primary-700">Coming Soon</h2>
-      </div>
-    );
-  }
-
   return (
     <div className="mt-20 px-5">
       <Helmet>
         <title>Deposit</title>
       </Helmet>
-      <h2 className="text-2xl  font-semibold text-base-500 mb-6">
+      <h2 className="text-2xl font-semibold text-base-500 mb-6">
         Deposit Funds
       </h2>
       <div className="mb-4 flex items-center gap-2">
@@ -192,42 +190,81 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
               onChange={handleInputChange}
             />
           </div>
-          {
-            errors.amount && (
-              <span className="text-red-500 text-sm">{errors.amount}</span>
-            ) // Added closing curly brace
-          }
+          {errors.amount && (
+            <span className="text-red-500 text-sm">{errors.amount}</span>
+          )}
         </div>
         <div className="mb-4">
-          <label
-            htmlFor="phone_number"
-            className="block text-sm font-medium text-primary-700 mb-1"
-          >
-            Phone Number
-          </label>
+          {method === "usdt" ? (
+            <label htmlFor="phone_number">USDT Address</label>
+          ) : (
+            <label htmlFor="phone_number">Phone Number</label>
+          )}
+
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4">
-              <div className="flex items-center gap-2 pr-3 border-r">
-                <img
-                  src="https://flagcdn.com/w40/so.png"
-                  width={22}
-                  height={16}
-                  alt="Somalia flag"
-                  className="rounded-sm"
-                />
-                <span className="text-sm font-medium">+252</span>
+            {method === "ebirr" ? (
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+                <div className="flex items-center gap-2 pr-3 border-r">
+                  <img
+                    src="https://flagcdn.com/w40/et.png"
+                    width={22}
+                    height={16}
+                    alt="Somalia flag"
+                    className="rounded-sm"
+                  />
+                  <span className="text-sm font-medium">+251</span>
+                </div>
               </div>
-            </div>
-            <input
-              type="text" // Changed from "number" to "text" to allow non-numeric characters (like "+" sign)
-              id="phone_number"
-              name="phone_number"
-              value={logedUser?.phone_number || depositData.phone_number}
-              readOnly // Make the field readonly
-              className="block w-full pl-24 pr-12 py-2 border border-base-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
-              placeholder="61635353"
-              onChange={handleInputChange}
-            />
+            ) : method === "Mpesa" ? (
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+                <div className="flex items-center gap-2 pr-3 border-r">
+                  <img
+                    src="https://flagcdn.com/w40/ke.png"
+                    width={22}
+                    height={16}
+                    alt="Somalia flag"
+                    className="rounded-sm"
+                  />
+                  <span className="text-sm font-medium">+254</span>
+                </div>
+              </div>
+            ) : method === "usdt" ? (
+              <></>
+            ) : (
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4">
+                <div className="flex items-center gap-2 pr-3 border-r">
+                  <img
+                    src="https://flagcdn.com/w40/so.png"
+                    width={22}
+                    height={16}
+                    alt="Somalia flag"
+                    className="rounded-sm"
+                  />
+                  <span className="text-sm font-medium">+252</span>
+                </div>
+              </div>
+            )}
+            {method === "usdt" ? (
+              <input
+                type="text"
+                id="phone_number"
+                name="phone_number"
+                value={depositData.phone_number}
+                className="block w-full pl-2  pr-12 py-2 border border-base-500 rounded-md focus:ring-base-400 outline-base-500 focus:border-base-400"
+                placeholder="USDT Adress"
+              />
+            ) : (
+              <input
+                type="text" // Changed from "number" to "text" to allow non-numeric characters (like "+" sign)
+                id="phone_number"
+                name="phone_number"
+                value={logedUser?.phone_number || depositData.phone_number}
+                readOnly // Make the field readonly
+                className="block w-full pl-24 pr-12 py-2 border border-base-500 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                placeholder="61635353"
+                onChange={handleInputChange}
+              />
+            )}
           </div>
         </div>
 
@@ -264,13 +301,13 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
 
       {/* Deposit Summary Table (Moved down and dashed borders) */}
       <div className="mt-6">
-        <h3 className="text-xl font-semibold  text-primary-700 mb-2">
+        <h3 className="text-xl font-semibold text-primary-700 mb-2">
           Deposit Summary
         </h3>
-        <table className="min-w-full  table-auto">
+        <table className="min-w-full table-auto">
           <thead>
             <tr>
-              <th className="px-4 py-2 text-left font-medium  text-primary-600 border-b-2 border-base-500 border-dashed">
+              <th className="px-4 py-2 text-left font-medium text-primary-600 border-b-2 border-base-500 border-dashed">
                 Field
               </th>
               <th className="px-4 py-2 text-left font-medium text-primary-600 border-b-2 border-base-500 border-dashed">
@@ -283,7 +320,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
               <td className="px-4 py-2 border-base-400 text-primary-600 border-b border-dashed">
                 Wallet Method
               </td>
-              <td className="px-4 py-2 border-base-400  text-primary-600 border-b border-dashed">
+              <td className="px-4 py-2 border-base-400 text-primary-600 border-b border-dashed">
                 {depositData.wallet_name}
               </td>
             </tr>

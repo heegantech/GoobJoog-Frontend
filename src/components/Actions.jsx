@@ -1,9 +1,7 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowDown, ArrowUp, RefreshCw, Check } from "lucide-react";
 import { FaExchangeAlt } from "react-icons/fa";
-
 import {
   Drawer,
   DrawerClose,
@@ -14,93 +12,94 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 const Actions = () => {
   const [activeAction, setActiveAction] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [wallets, setWallets] = useState([]);
+  const [images, setImages] = useState([]);
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-      }, 3000);
+    const fetchWallets = async () => {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const access = userData?.access;
+      try {
+        const response = await fetch("https://api.goobjoogpay.com//api/wallets/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access}`,
+          },
+        });
+        if (!response.ok) throw new Error("Network response was not ok");
+        setWallets(await response.json());
+      } catch (error) {
+        console.error("Error fetching wallets:", error);
+      }
+    };
 
+    const fetchImages = async () => {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const access = userData?.access;
+      try {
+        const response = await fetch("/api/wallet-imgs/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access}`,
+          },
+        });
+        setImages(await response.json());
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+    fetchWallets();
+  }, []);
+
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => setIsVisible(false), 3000);
       return () => clearTimeout(timer);
     }
   }, [isVisible]);
 
-  const handleActionSubmit = (event) => {
-    event.preventDefault();
-    if (paymentMethod) {
-      navigate(`/wallet_name/${paymentMethod}`);
+  const handleMethodSelect = (wallet) => {
+    setSelectedMethod(wallet.id);
+    if (activeAction) {
+      navigate(`/${activeAction.toLowerCase()}/${wallet.wallet_name}`);
+      setIsDrawerOpen(false);
     }
   };
 
-  const PopUpAlert = () => (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-64 bg-white rounded-md shadow-lg p-4 text-center animate-pop-up z-50">
-      <p className="text-sm font-medium text-gray-800">Coming Soon</p>
-      <p className="text-xs text-gray-600 mt-1">New feature on its way!</p>
-    </div>
-  );
-
-  const renderPaymentMethods = () => (
-    <div>
-      <div className="flex flex-col space-y-4 ">
-        {["evcplus", "premier wallet", "golis", "USDT"].map((method) => (
-          <button
-            key={method}
-            className="flex  hover:border-base-500 items-center text-black py-2 px-4 rounded-lg border-gray-400 border  transition duration-300"
-            onClick={() => {
-              setPaymentMethod(method);
-              if (method === "evcplus") {
-                navigate(`/${activeAction.toLowerCase()}/${method}`);
-              } else {
-                setIsVisible(true);
-                setIsDrawerOpen(false);
-              }
-            }}
-          >
-            <div className="flex items-center space-x-2">
-              <div className="p-2 rounded-full  flex items-center justify-center">
-                <img
-                  className="w-10 rounded-full "
-                  src={
-                    method === "evcplus"
-                      ? "evc-plus.png"
-                      : method === "golis"
-                      ? "golis.png"
-                      : method === "premier wallet"
-                      ? "premier-walltet.png"
-                      : method === "USDT"
-                      ? "usdt.webp"
-                      : method === "moneyGo"
-                      ? "moneyGo.png"
-                      : null
-                  }
-                  alt="Payment Method"
-                />
-              </div>
-              <span className="pl-2 text-black text-xl font-semibold capitalize">
-                {method}
-              </span>
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+  const handleActionClick = (action) => {
+    if (action === "Swap") {
+      navigate("/swap");
+    } else {
+      setActiveAction(action);
+      setIsDrawerOpen(true);
+    }
+  };
 
   return (
     <div>
-      {isVisible && <PopUpAlert />}
-      {/* Actions Section */}
-      <section className="grid grid-cols-3 gap-4 mb-8">
+      {isVisible && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-64 bg-white rounded-md shadow-lg p-4 text-center animate-pop-up z-50">
+          <p className="text-sm font-medium text-gray-800">Coming Soon</p>
+          <p className="text-xs text-gray-600 mt-1">New feature on its way!</p>
+        </div>
+      )}
+      <section className="grid grid-cols-3 gap-4 max-w-md mx-auto">
         {["Deposit", "Withdraw", "Swap"].map((action) => (
-          <React.Fragment key={action}>
+          <div key={action} onClick={() => handleActionClick(action)}>
             {action === "Swap" ? (
               <Link
                 to="/swap"
@@ -114,26 +113,15 @@ const Actions = () => {
             ) : (
               <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                 <DrawerTrigger asChild>
-                  <button
-                    className="mt-4 p-4 flex flex-col items-center justify-center group"
-                    onClick={() => {
-                      setActiveAction(action);
-                      setIsDrawerOpen(true);
-                    }}
-                  >
+                  <button className="mt-4 p-4 flex flex-col items-center justify-center group">
                     <div
                       className={`p-3 rounded-full mb-2 group-hover:bg-[#7173d6] transition duration-300 ${
-                        action === "Deposit"
-                          ? "bg-base-300"
-                          : action === "Withdraw"
-                          ? "bg-red-200"
-                          : ""
+                        action === "Deposit" ? "bg-base-300" : "bg-red-200"
                       }`}
                     >
-                      {action === "Deposit" && (
+                      {action === "Deposit" ? (
                         <ArrowDown className="text-blue-600" size={24} />
-                      )}
-                      {action === "Withdraw" && (
+                      ) : (
                         <ArrowUp className="text-red-600" size={24} />
                       )}
                     </div>
@@ -142,31 +130,49 @@ const Actions = () => {
                     </span>
                   </button>
                 </DrawerTrigger>
-
-                <DrawerContent className="max-w-[600px] mx-auto rounded-t-3xl p-4">
+                <DrawerContent className="max-w-md mx-auto rounded-t-3xl">
                   <DrawerHeader>
-                    <DrawerTitle className="text-start text-xl border-b pb-4 pt-2">
-                      {activeAction} Payment Methods
-                    </DrawerTitle>
-                    <DrawerClose />
+                    <DrawerTitle>{activeAction} Payment Methods</DrawerTitle>
+                    <DrawerDescription>
+                      Select a payment method to {activeAction?.toLowerCase()}
+                    </DrawerDescription>
                   </DrawerHeader>
-                  <DrawerDescription className="p-4">
-                    {/* Payment Methods for Deposit and Withdraw */}
-                    {(activeAction === "Deposit" ||
-                      activeAction === "Withdraw") &&
-                      renderPaymentMethods()}
-                  </DrawerDescription>
-                  <DrawerFooter className="border-t pt-4">
+                  <div className="p-6 grid gap-4">
+                    {wallets.map((wallet) => (
+                      <div
+                        key={wallet.id}
+                        className="w-full flex items-center justify-between py-1 px-4 border rounded-xl"
+                        onClick={() => handleMethodSelect(wallet)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={wallet.wallet_image}
+                            alt={wallet.wallet_name}
+                            className="w-10 h-10 object-contain rounded-full"
+                          />
+                          <span className="font-semibold capitalize">
+                            {wallet.wallet_name === "usdt"
+                              ? "USDT"
+                              : wallet.wallet_name}
+                          </span>
+                        </div>
+                        {selectedMethod === wallet.id && (
+                          <Check className="h-4 w-4 text-blue-500" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <DrawerFooter>
                     <DrawerClose asChild>
-                      <button className="w-full bg-gray-500 text-white py-4 rounded-lg hover:bg-gray-600 transition">
+                      <Button variant="outline" className="py-4 bg-gray-300">
                         Close
-                      </button>
+                      </Button>
                     </DrawerClose>
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>
             )}
-          </React.Fragment>
+          </div>
         ))}
       </section>
     </div>

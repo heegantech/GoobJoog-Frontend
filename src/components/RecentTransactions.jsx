@@ -56,14 +56,11 @@ const RecentTransactions = () => {
     // }
 
     try {
-      const response = await fetch(
-        "https://api.goobjoogpay.com/api/transactions/",
-        {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const response = await fetch("/api/transactions/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -80,7 +77,7 @@ const RecentTransactions = () => {
 
   const fetchSwapRates = async () => {
     try {
-      const response = await fetch("/api/swap-rates/");
+      const response = await fetch("https://api.goobjoogpay.com//api/swap-rates/");
       const data = await response.json();
       setSwapRates(data);
     } catch (error) {
@@ -94,9 +91,9 @@ const RecentTransactions = () => {
   }, []);
 
   return (
-    <section className="mb-8">
+    <section className="mb-8 mt-5">
       <div className="flex justify-between">
-        <h2 className="text-2xl font-semibold text-gray-800">
+        <h2 className="text-sm font-semibold text-gray-800">
           Recent Transactions
         </h2>
         <Link to="/transactions" className="text-sm font-semibold">

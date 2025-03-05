@@ -39,7 +39,7 @@ export default function ProfilePage() {
     }
 
     try {
-      const response = await fetch("https://api.goobjoogpay.com/auth/users/me/", {
+      const response = await fetch("/auth/users/me/", {
         headers: {
           Authorization: `Bearer ${access}`,
         },
