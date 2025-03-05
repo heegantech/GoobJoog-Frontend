@@ -113,7 +113,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const access = userData.access;
     try {
       const response = await fetch(
-        "https://api.goobjoogpay.com//auth/users/me/",
+        "https://api.goobjoogpay.com/auth/users/me/",
         {
           method: "GET",
           headers: {
