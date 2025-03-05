@@ -56,11 +56,14 @@ const TransactionList = () => {
     //   return;
     // }
     try {
-      const response = await fetch("/api/transactions/", {
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
+      const response = await fetch(
+        "https://api.goobjoogpay.com/api/transactions/",
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

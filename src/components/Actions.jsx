@@ -30,13 +30,16 @@ const Actions = () => {
       const userData = JSON.parse(localStorage.getItem("userData"));
       const access = userData?.access;
       try {
-        const response = await fetch("https://api.goobjoogpay.com//api/wallets/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access}`,
-          },
-        });
+        const response = await fetch(
+          "https://api.goobjoogpay.com/api/wallets/",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access}`,
+            },
+          }
+        );
         if (!response.ok) throw new Error("Network response was not ok");
         setWallets(await response.json());
       } catch (error) {

@@ -77,17 +77,14 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     }
 
     try {
-      const response = await fetch(
-        "https://api.goobjoogpay.com//api/deposit/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access}`,
-          },
-          body: JSON.stringify(depositData),
-        }
-      );
+      const response = await fetch("https://api.goobjoogpay.com/api/deposit/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access}`,
+        },
+        body: JSON.stringify(depositData),
+      });
 
       const responseData = await response.json();
 

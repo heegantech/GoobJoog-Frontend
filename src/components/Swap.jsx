@@ -33,17 +33,20 @@ const Swap = () => {
       }
 
       try {
-        const response = await fetch("/api/swap-rate/", {
-          method: "POST", // Changed to POST request
-          headers: {
-            "Content-Type": "application/json", // Correct content type for POST
-            Authorization: `Bearer ${access}`, // Pass the authorization token
-          },
-          body: JSON.stringify({
-            from_wallet: from_wallet,
-            to_wallet: to_wallet,
-          }),
-        });
+        const response = await fetch(
+          "https://api.goobjoogpay.com/api/swap-rate/",
+          {
+            method: "POST", // Changed to POST request
+            headers: {
+              "Content-Type": "application/json", // Correct content type for POST
+              Authorization: `Bearer ${access}`, // Pass the authorization token
+            },
+            body: JSON.stringify({
+              from_wallet: from_wallet,
+              to_wallet: to_wallet,
+            }),
+          }
+        );
         console.log("response from swap rate", response);
         // Check if the response is ok
         if (!response.ok) {
@@ -114,7 +117,7 @@ const Swap = () => {
 
     try {
       // Before sending the WhatsApp message, fetch the swap
-      const response = await fetch("/api/swap/", {
+      const response = await fetch("https://api.goobjoogpay.com/api/swap/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
