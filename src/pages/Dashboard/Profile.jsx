@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Helmet } from "react-helmet";
+import { useAuth } from "@/hooks/useUser";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => (
@@ -58,9 +59,10 @@ export default function ProfilePage() {
     }
   };
 
+  const { logOut } = useAuth();
+
   const handleLogout = () => {
-    localStorage.removeItem("userData");
-    navigate("/login");
+    logOut();
   };
 
   useEffect(() => {

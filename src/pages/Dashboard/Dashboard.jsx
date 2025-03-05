@@ -3,15 +3,17 @@ import WalletBalance from "./WalletBalance";
 import Balance from "@/components/Balance";
 import Actions from "@/components/Actions";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const access = userData?.access;
+  // const navigate = useNavigate();
+  // const userData = JSON.parse(localStorage.getItem("userData"));
+  // const access = userData?.access;
 
-  if (!access) {
-    navigate("/login");
-    return;
-  }
+  // if (!access) {
+  //   navigate("/login");
+  //   return;
+  // }
 
   return (
     <main className="px-4 pt-20 pb-24">
