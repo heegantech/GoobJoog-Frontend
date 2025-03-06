@@ -341,6 +341,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
           </tbody>
         </table>
       </div>
+       </div> 
     </div>
   );
 };
