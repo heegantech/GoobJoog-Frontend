@@ -16,7 +16,7 @@ import Swap from "./components/Swap";
 
 function App() {
   return (
-    <div className="max-w-md mx-auto w-full">
+    <div className="">
       <Router>
         <Toaster />
         <Routes>

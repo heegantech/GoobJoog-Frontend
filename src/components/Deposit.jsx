@@ -147,7 +147,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
   }, [logedUser]);
 
   return (
-    <div className="mt-20 px-5">
+    <div className="max-w-md mx-auto w-full h-[670px] mt-20 px-5">
       <Helmet>
         <title>Deposit</title>
       </Helmet>

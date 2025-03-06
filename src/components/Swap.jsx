@@ -167,7 +167,7 @@ const Swap = () => {
       : 0;
 
   return (
-    <div className="mt-20 px-5 h-[800px]">
+    <div className="max-w-md mx-auto w-full mt-20 px-5 h-[800px]">
       <Helmet>
         <title>Swap</title>
       </Helmet>

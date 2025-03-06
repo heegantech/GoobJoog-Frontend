@@ -98,7 +98,7 @@ const TransactionList = () => {
   };
 
   const renderSkeleton = () => (
-    <div className="flex items-center justify-between p-3 border border-primary-100 rounded-xl">
+    <div className="  flex items-center justify-between p-3 border border-primary-100 rounded-xl">
       <div className="flex items-center space-x-3">
         <div className="bg-primary-100 p-2 border rounded-xl animate-pulse">
           <div className="bg-gray-300 w-18 h-18 rounded-xl"></div>
@@ -113,7 +113,7 @@ const TransactionList = () => {
   );
 
   return (
-    <div className="bg-white text-primary-950">
+    <div className="max-w-md mx-auto w-full bg-white text-primary-950">
       <Helmet>
         <title>Transactions</title>
       </Helmet>

@@ -16,7 +16,7 @@ const Dashboard = () => {
   // }
 
   return (
-    <main className="px-4 pt-20 pb-24">
+    <main className="max-w-md mx-auto w-full px-4 pt-20 pb-24">
       <Helmet>
         <title>Home</title>
       </Helmet>

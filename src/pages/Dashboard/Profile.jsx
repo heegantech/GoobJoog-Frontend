@@ -70,7 +70,7 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div className="min-h-screen mt-15 p-2">
+    <div className="h-[750px] max-w-md mx-auto w-full  mt-15 p-2">
       <Helmet>
         <title>Profile</title>
       </Helmet>
@@ -127,7 +127,6 @@ export default function ProfilePage() {
             className="text-red-500"
             onClick={handleLogout}
           />
-          <hr />
         </CardContent>
       </Card>
     </div>

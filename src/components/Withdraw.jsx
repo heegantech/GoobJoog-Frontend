@@ -75,16 +75,8 @@ const Withdraw = () => {
     }
   };
 
-  if (method !== "evcplus") {
-    return (
-      <div className="mt-20 px-5">
-        <h2 className="text-xl font-semibold text-primary-700">Coming Soon</h2>
-      </div>
-    );
-  }
-
   return (
-    <div className="mt-20 px-5">
+    <div className="max-w-md mx-auto w-full mt-20 px-5">
       <Helmet>
         <title>Withdrawals</title>
       </Helmet>

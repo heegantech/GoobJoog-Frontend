@@ -96,7 +96,7 @@ const RecentTransactions = () => {
   }, []);
 
   return (
-    <section className="mb-8 mt-5">
+    <section className="mb-8 mt-5 ">
       <div className="flex justify-between">
         <h2 className="text-sm font-semibold text-gray-800">
           Recent Transactions
