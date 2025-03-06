@@ -155,13 +155,6 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
         Deposit Funds
       </h2>
         <div className="mb-4 flex items-center gap-2">
-          <img
-            src={method}
-            width={40}
-            height={16}
-            className="border border-base-500 rounded-sm"
-            alt=""
-          />
       {/* Deposit Form */}
       <form onSubmit={handleDeposit}>
         <div className="mb-4">
