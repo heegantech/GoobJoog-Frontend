@@ -155,14 +155,14 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
         Deposit Funds
       </h2>
       <div className="mb-4 flex items-center gap-2">
-        <img
-          src={method === "evcplus" ? "/evc-plus.png" : "so.png"}
-          width={40}
-          height={16}
-          className="border border-base-500 rounded-sm"
-          alt="Wallet logo"
-        />
-        <span className="text-sm font-medium">{method.toUpperCase()}</span>
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/8074/8074045.png"
+        width={40}
+        height={16}
+        className="border border-base-500 rounded-sm"
+        alt=""
+      />
+    <span className="text-sm font-medium">{method.toUpperCase()}</span>
       </div>
       {/* Deposit Form */}
       <form onSubmit={handleDeposit}>

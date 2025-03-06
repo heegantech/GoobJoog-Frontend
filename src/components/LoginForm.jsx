@@ -17,7 +17,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { login, user } = useAuth();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,12 +28,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    // if (!validatePhoneNumber(loginData.phone_number)) {
-    //   setError("Phone number must be 9 digits and start with 07 or 61.");
-    //   setIsLoading(false);
-    //   return;
-    // }
 
     try {
       const response = await fetch(
@@ -61,28 +54,20 @@ const Login = () => {
     }
   };
 
-  // const validatePhoneNumber = (phone) => {
-  //   // Check if the phone number is 9 digits and either starts with 07 or 61
-  //   const phonePattern = /^(07\d{7}|61\d{7})$/;
-  //   return phonePattern.test(phone);
-  // };
-
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="min-h-screen grid lg:grid-cols-2 gap-0">
       {/* Left Column - Login Form */}
       <div className="flex items-center justify-center p-6 lg:p-8">
         <div className="w-full max-w-sm space-y-8">
           {/* Logo */}
-
-          <div className="space-y-2">
-            <div className="text-center">
-              <img src="logo.png" className="w-14 h-14" alt="" />
-            </div>
+          <div className="space-y-2 text-center">
+            <img src="logo.png" className="w-14 h-14 mx-auto" alt="Logo" />
             <h1 className="text-4xl font-bold text-base-500 tracking-tight">
               Welcome back
             </h1>
             <p className="text-lg text-muted-foreground">Sign in to continue</p>
           </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Phone Input with Flag */}
             <div className="space-y-2">
@@ -99,7 +84,6 @@ const Login = () => {
                     <span className="text-sm font-medium">+252</span>
                   </div>
                 </div>
-
                 <input
                   type="tel"
                   placeholder="Phone number"
@@ -112,6 +96,7 @@ const Login = () => {
                 />
               </div>
             </div>
+
             {/* Password Input */}
             <div className="space-y-2">
               <input
@@ -125,6 +110,7 @@ const Login = () => {
                 required
               />
             </div>
+
             {/* Login Button */}
             <Button
               type="submit"
@@ -134,7 +120,7 @@ const Login = () => {
               {isLoading ? "Signing in..." : "Continue"}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-            {/* Help Link */}
+
             {/* Register Link */}
             <div className="text-center mt-4">
               <Link
@@ -147,19 +133,18 @@ const Login = () => {
           </form>
         </div>
       </div>
+
       {/* Right Column - Gradient Background */}
-      <div className="hidden lg:block">
-        <div className="h-full bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(40deg,rgba(255,255,255,0.8)_0%,rgba(255,255,255,0)_30%)] opacity-20" />
-          <div className="absolute inset-0 p-12 flex flex-col justify-between text-white">
-            <div />
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold">Secure Payments</h2>
-              <p className="text-lg text-gray-300 max-w-md">
-                Fast, secure, and reliable payment services for all your
-                transactions
-              </p>
-            </div>
+      <div className="hidden lg:block relative bg-gradient-to-br from-black via-gray-900 to-gray-800">
+        <div className="absolute inset-0 bg-[linear-gradient(40deg,rgba(255,255,255,0.8)_0%,rgba(255,255,255,0)_30%)] opacity-20" />
+        <div className="absolute inset-0 p-12 flex flex-col justify-between text-white">
+          <div />
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold">Secure Payments</h2>
+            <p className="text-lg text-gray-300 max-w-md">
+              Fast, secure, and reliable payment services for all your
+              transactions
+            </p>
           </div>
         </div>
       </div>
