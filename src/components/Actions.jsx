@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowDown, ArrowUp, RefreshCw, Check } from "lucide-react";
-import { FaExchangeAlt } from "react-icons/fa";
 import {
   Drawer,
   DrawerClose,
@@ -14,72 +14,50 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { FaExchangeAlt } from "react-icons/fa";
 
 const Actions = () => {
   const [activeAction, setActiveAction] = useState(null);
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [wallets, setWallets] = useState([]);
-  const [images, setImages] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
-  const navigate = useNavigate();
+
+  const fetchWallets = async () => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const access = userData?.access;
+    try {
+      const response = await fetch("/api/wallets/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setWallets(data);
+    } catch (error) {
+      console.error("Error fetching wallets:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchWallets = async () => {
-      const userData = JSON.parse(localStorage.getItem("userData"));
-      const access = userData?.access;
-      try {
-        const response = await fetch(
-          "https://api.goobjoogpay.com/api/wallets/",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${access}`,
-            },
-          }
-        );
-        if (!response.ok) throw new Error("Network response was not ok");
-        setWallets(await response.json());
-      } catch (error) {
-        console.error("Error fetching wallets:", error);
-      }
-    };
-
-    const fetchImages = async () => {
-      const userData = JSON.parse(localStorage.getItem("userData"));
-      const access = userData?.access;
-      try {
-        const response = await fetch("/api/wallet-imgs/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access}`,
-          },
-        });
-        setImages(await response.json());
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
-    };
-
-    fetchImages();
     fetchWallets();
   }, []);
 
-  useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => setIsVisible(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isVisible]);
+  const navigate = useNavigate();
 
   const handleMethodSelect = (wallet) => {
     setSelectedMethod(wallet.id);
+
+    // Directly navigate based on selected wallet and active action
     if (activeAction) {
       navigate(`/${activeAction.toLowerCase()}/${wallet.wallet_name}`);
-      setIsDrawerOpen(false);
+      setIsDrawerOpen(false); // Close the drawer after selection
     }
   };
 
@@ -88,18 +66,12 @@ const Actions = () => {
       navigate("/swap");
     } else {
       setActiveAction(action);
-      setIsDrawerOpen(true);
+      setIsDrawerOpen(true); // Open the drawer for Deposit/Withdraw
     }
   };
 
   return (
-    <div>
-      {isVisible && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-64 bg-white rounded-md shadow-lg p-4 text-center animate-pop-up z-50">
-          <p className="text-sm font-medium text-gray-800">Coming Soon</p>
-          <p className="text-xs text-gray-600 mt-1">New feature on its way!</p>
-        </div>
-      )}
+    <div className="relative">
       <section className="grid grid-cols-3 gap-4 max-w-md mx-auto">
         {["Deposit", "Withdraw", "Swap"].map((action) => (
           <div key={action} onClick={() => handleActionClick(action)}>
@@ -178,6 +150,52 @@ const Actions = () => {
           </div>
         ))}
       </section>
+
+      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <DrawerContent className="max-w-md mx-auto rounded-t-3xl">
+          <DrawerHeader>
+            <DrawerTitle>{activeAction} Payment Methods</DrawerTitle>
+            <DrawerDescription>
+              Select a payment method to {activeAction?.toLowerCase()}
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="p-6 grid gap-4">
+            {wallets.map((wallet) => (
+              <div
+                key={wallet.id}
+                className={cn(
+                  "w-full flex items-center justify-between py-1 px-4 border rounded-xl cursor-pointer",
+                  selectedMethod === wallet.id && "border-blue-500"
+                )}
+                onClick={() => handleMethodSelect(wallet)}
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={wallet.wallet_image}
+                    alt={wallet.wallet_name}
+                    className="w-10 h-10 object-contain rounded-full"
+                  />
+                  <span className="font-semibold capitalize">
+                    {wallet.wallet_name === "usdt"
+                      ? "USDT"
+                      : wallet.wallet_name}
+                  </span>
+                </div>
+                {selectedMethod === wallet.id && (
+                  <Check className="h-4 w-4 text-blue-500" />
+                )}
+              </div>
+            ))}
+          </div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline" className="py-4 bg-gray-300">
+                Close
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };

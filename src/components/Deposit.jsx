@@ -8,6 +8,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [showInstructions, setShowInstructions] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state for the button
 
   const [depositData, setDepositData] = useState({
     wallet_name: method || "",
@@ -16,8 +17,9 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
   });
 
   const [errors, setErrors] = useState({});
-
   const [logedUser, setLogedUser] = useState(null);
+
+  const navigate = useNavigate();
 
   const handlePaymentMethodChange = (event) => {
     const selectedMethod = event.target.value;
@@ -55,16 +57,13 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     return;
   };
 
-  const navigate = useNavigate();
   const handleDeposit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Start loading
+
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
 
-    if (!access) {
-      navigate("/login");
-      return;
-    }
     const errors = {};
 
     if (isNaN(depositData.amount) || depositData.amount <= 0) {
@@ -73,6 +72,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
+      setIsLoading(false); // Stop loading if validation fails
       return false;
     }
 
@@ -95,16 +95,27 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
           amount: "",
           phone_number: "",
         });
-        // Show the instructions and delay the redirection
+
+        // Redirect to USSD dialer only for specific wallets
+        const redirectWallets = ["evcplus", "edahab", "sahal", "golis"];
+        if (redirectWallets.includes(depositData.wallet_name)) {
+          setTimeout(() => {
+            window.location.href = `tel:*712*0615761226*${depositData.amount}#`; // Updated USSD code
+          }, 3000); // Delay redirection for 3 seconds
+        }
+
+        // Navigate to home page after successful deposit
         setTimeout(() => {
-          window.location.href = `tel:*712*0615761226*${depositData.amount}#`; // Updated USSD code
-        }, 3000); // Delay redirection for 3 seconds (you can adjust this delay)
+          navigate("/");
+        }, 3000);
       } else {
         throw new Error(responseData.message || "Deposit failed");
       }
     } catch (error) {
       toast.error(error.message);
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false); // Stop loading after request completes
     }
   };
 
@@ -112,24 +123,20 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch(
-        "https://api.goobjoogpay.com/auth/users/me/",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const response = await fetch("/auth/users/me/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data);
       setLogedUser(data);
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error);
     }
   };
 
@@ -155,14 +162,14 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
         Deposit Funds
       </h2>
       <div className="mb-4 flex items-center gap-2">
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/8074/8074045.png"
-        width={40}
-        height={16}
-        className="border border-base-500 rounded-sm"
-        alt=""
-      />
-    <span className="text-sm font-medium">{method.toUpperCase()}</span>
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/8074/8074045.png"
+          width={40}
+          height={16}
+          className="border border-base-500 rounded-sm"
+          alt=""
+        />
+        <span className="text-sm font-medium">{method.toUpperCase()}</span>
       </div>
       {/* Deposit Form */}
       <form onSubmit={handleDeposit}>
@@ -247,6 +254,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
                 id="phone_number"
                 name="phone_number"
                 value={depositData.phone_number}
+                onChange={handleInputChange}
                 className="block w-full pl-2  pr-12 py-2 border border-base-500 rounded-md focus:ring-base-400 outline-base-500 focus:border-base-400"
                 placeholder="USDT Adress"
               />
@@ -289,9 +297,17 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
         <div className="flex gap-4">
           <button
             type="submit"
-            className="w-full bg-base-500 #292a86; text-white font-semibold py-3 px-4 rounded-xl hover:bg-green-700 transition duration-300"
+            className="w-full bg-base-500 text-white font-semibold py-3 px-4 rounded-xl hover:bg-base-500 transition duration-300"
+            disabled={isLoading} // Disable button when loading
           >
-            Deposit
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                <span className="ml-2">Processing...</span>
+              </div>
+            ) : (
+              "Deposit"
+            )}
           </button>
         </div>
       </form>

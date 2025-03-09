@@ -18,7 +18,7 @@ const Balance = () => {
       const userData = JSON.parse(localStorage.getItem("userData"));
       if (!userData?.access) return;
 
-      const response = await fetch("https://api.goobjoogpay.com/api/balance/", {
+      const response = await fetch("/api/balance/", {
         method: "GET",
         headers: { Authorization: `Bearer ${userData.access}` },
       });
@@ -39,13 +39,10 @@ const Balance = () => {
       const userData = JSON.parse(localStorage.getItem("userData"));
       if (!userData?.access) return;
 
-      const response = await fetch(
-        "https://api.goobjoogpay.com/api/pending-payments/",
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${userData.access}` },
-        }
-      );
+      const response = await fetch("/api/pending-payments/", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${userData.access}` },
+      });
 
       if (!response.ok) throw new Error("Failed to fetch pending payments");
       const data = await response.json();

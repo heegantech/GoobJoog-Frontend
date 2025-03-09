@@ -1,6 +1,8 @@
 import { Lock, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../hooks/useUser";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -12,6 +14,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const validatePhoneNumber = (phone) => {
     const phonePattern = /^(07\d{7}|61\d{7})$/;
@@ -30,18 +33,49 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://api.goobjoogpay.com/auth/users/", {
+      // Register the user
+      const registerResponse = await fetch("/auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(registerData),
       });
-      const data = await response.json();
-      console.log("Success:", data);
-      navigate("/login");
+
+      if (!registerResponse.ok) {
+        const data = await registerResponse.json();
+        const errorMessage =
+          data.full_name?.[0] ||
+          data.phone_number?.[0] ||
+          data.password?.[0] ||
+          "Registration failed.";
+        toast.error(errorMessage);
+        return;
+      }
+
+      // Automatically log in the user after registration
+      const loginResponse = await fetch("/auth/jwt/create/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone_number: registerData.phone_number,
+          password: registerData.password,
+        }),
+      });
+
+      if (!loginResponse.ok) {
+        toast.error("Login failed after registration.");
+        return;
+      }
+
+      const loginData = await loginResponse.json();
+      login(loginData); // Use the login function from useAuth to set user state
+      navigate("/"); // Redirect to the home page
+      toast.success("Account created and logged in successfully.");
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("Error: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -137,22 +171,14 @@ const Register = () => {
             </div>
           </div>
 
-          <div>
-            <button
-              className="w-full bg-base-500 hover:bg-base-400 text-white font-bold py-3 px-4 rounded-lg focus:outline-none transition duration-300"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? "Signing Up..." : "Sign Up"}
-            </button>
-          </div>
+          <button
+            className="w-full bg-base-500 hover:bg-base-400 text-white font-bold py-3 px-4 rounded-lg focus:outline-none transition duration-300"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Signing Up..." : "Sign Up"}
+          </button>
         </form>
-        <p className="text-center text-primary-600 text-sm mt-6">
-          Already have an account?{" "}
-          <Link to="/login" className="font-bold hover:text-primary-700">
-            Sign in
-          </Link>
-        </p>
       </div>
     </div>
   );

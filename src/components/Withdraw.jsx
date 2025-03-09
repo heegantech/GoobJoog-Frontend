@@ -5,23 +5,9 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const Withdraw = () => {
   const { method } = useParams();
-
   const [errors, setErrors] = useState({});
-
+  const [isLoading, setIsLoading] = useState(false); // New state for loading
   const navigate = useNavigate();
-
-  // const validate = () => {
-  //   const errors = {};
-
-  //   if (isNaN(withdrawData.amount) || withdrawData.amount <= 0) {
-  //     errors.amount = "Please enter a valid amount greater than zero";
-  //   }
-
-  //   if (Object.keys(errors).length > 0) {
-  //     setErrors(errors);
-  //     return false;
-  //   }
-  // };
 
   const handleWithdraw = async (e) => {
     e.preventDefault();
@@ -51,8 +37,10 @@ const Withdraw = () => {
       return false;
     }
 
+    setIsLoading(true); // Set loading to true before making the request
+
     try {
-      const response = await fetch("https://api.goobjoogpay.com/api/payout/", {
+      const response = await fetch("/api/payout/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,6 +60,8 @@ const Withdraw = () => {
     } catch (error) {
       toast.error(error.message);
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false); // Set loading to false after the request is complete
     }
   };
 
@@ -111,6 +101,7 @@ const Withdraw = () => {
               name="amount"
               className="block w-full pl-7 pr-12 py-2 border border-base-500 rounded-md focus:ring-base-400 outline-base-500 focus:border-base-400"
               placeholder="0.00"
+              disabled={isLoading} // Disable input when loading
             />
           </div>
           {errors.amount && (
@@ -147,14 +138,23 @@ const Withdraw = () => {
               required
               className="block w-full pl-24 pr-12 py-2 border border-base-500 rounded-md focus:ring-base-400 outline-base-400 focus:border-base-500"
               placeholder="61xxxxxxx"
+              disabled={isLoading} // Disable input when loading
             />
           </div>
         </div>
         <button
           type="submit"
           className="w-full bg-base-500 text-white font-semibold py-3 px-4 rounded-xl hover:bg-base-500 transition duration-300"
+          disabled={isLoading} // Disable button when loading
         >
-          Withdraw
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+              <span className="ml-2">Processing...</span>
+            </div>
+          ) : (
+            "Withdraw"
+          )}
         </button>
       </form>
     </div>

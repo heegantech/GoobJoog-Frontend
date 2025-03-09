@@ -33,34 +33,32 @@ const Swap = () => {
       }
 
       try {
-        const response = await fetch(
-          "https://api.goobjoogpay.com/api/swap-rate/",
-          {
-            method: "POST", // Changed to POST request
-            headers: {
-              "Content-Type": "application/json", // Correct content type for POST
-              Authorization: `Bearer ${access}`, // Pass the authorization token
-            },
-            body: JSON.stringify({
-              from_wallet: from_wallet,
-              to_wallet: to_wallet,
-            }),
-          }
-        );
-        console.log("response from swap rate", response);
-        // Check if the response is ok
-        if (!response.ok) {
-          throw new Error("Failed to fetch swap rate");
-        }
+        const response = await fetch("/api/swap-rate/", {
+          method: "POST", // Changed to POST request
+          headers: {
+            "Content-Type": "application/json", // Correct content type for POST
+            Authorization: `Bearer ${access}`, // Pass the authorization token
+          },
+          body: JSON.stringify({
+            from_wallet: from_wallet,
+            to_wallet: to_wallet,
+          }),
+        });
 
         const data = await response.json();
+
+        // Check if the response is ok
+        if (!response.ok) {
+          toast.error(data.message);
+          return;
+        }
 
         // Set the swap rate and fee
         setSwapRate(data?.swap_rate || 0); // Ensure the rate is correctly set
         // setSwapFee(data?.swap_rate || 0); // Ensure the fee is correctly set
       } catch (error) {
         console.error("Error fetching swap rate:", error);
-        toast.error("Failed to fetch swap rate");
+        toast.error("Failed to fetch swap rate: " + error.message);
       }
     };
 
@@ -117,7 +115,7 @@ const Swap = () => {
 
     try {
       // Before sending the WhatsApp message, fetch the swap
-      const response = await fetch("https://api.goobjoogpay.com/api/swap/", {
+      const response = await fetch("/api/swap/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
