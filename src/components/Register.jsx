@@ -86,7 +86,7 @@ const Register = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md px-4">
         <div className="text-start mb-8">
-          <img src={LOGO} className="w-10 h-10" alt="" />
+          <img src="./logo.png" className="w-10 h-10" alt="" />
 
           <p className="text-base-500 mt-2">Create your account below.</p>
         </div>

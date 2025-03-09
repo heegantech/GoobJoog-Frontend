@@ -136,11 +136,7 @@ const RecentTransactions = () => {
                 >
                   <div className="flex items-center space-x-3 ">
                     <img
-                      src={
-                        transaction.wallet === "evcplus"
-                          ? "evc-plus.png"
-                          : "/premier-wallet.png"
-                      }
+                      src={getWalletImage(transaction.wallet)}
                       className="w-20 bg-primary-100 p-2 border rounded-xl"
                       alt="Transaction"
                     />

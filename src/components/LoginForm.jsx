@@ -58,7 +58,7 @@ const Login = () => {
         <div className="w-full max-w-sm space-y-8">
           {/* Logo */}
           <div className="space-y-2 text-center">
-            <img src={LOGO} className="w-14 h-14 mx-auto" alt="Logo" />
+            <img src="./logo.png" className="w-14 h-14 mx-auto" alt="Logo" />
             <h1 className="text-4xl font-bold text-base-500 tracking-tight">
               Welcome back
             </h1>
