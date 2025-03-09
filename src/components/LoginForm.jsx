@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useUser";
 import toast from "react-hot-toast";
-import { BASE_URL } from "@/lib/base";
+import { BASE_URL, LOGO } from "@/lib/base";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -58,11 +58,7 @@ const Login = () => {
         <div className="w-full max-w-sm space-y-8">
           {/* Logo */}
           <div className="space-y-2 text-center">
-            <img
-              src={import.meta.env.VITE_REACT_LOGO_URL}
-              className="w-14 h-14 mx-auto"
-              alt="Logo"
-            />
+            <img src={LOGO} className="w-14 h-14 mx-auto" alt="Logo" />
             <h1 className="text-4xl font-bold text-base-500 tracking-tight">
               Welcome back
             </h1>

@@ -37,6 +37,7 @@ const RecentTransactions = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [swapRates, setSwapRates] = useState([]);
+  const [wallets, setWallets] = useState([]);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -48,13 +49,32 @@ const RecentTransactions = () => {
   //   // Add your recheck logic here
   // };
 
+  const fetchWallets = async () => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const access = userData?.access;
+    try {
+      const response = await fetch(`${BASE_URL}/api/wallets/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setWallets(data);
+    } catch (error) {
+      // console.error("Error fetching wallets:", error);
+    }
+  };
+
   const fetchTransactions = async () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData?.access;
-    // if (!access) {
-    //   navigate(`/?redirectTo=${location.pathname}`);
-    //   return;
-    // }
 
     try {
       const response = await fetch(`${BASE_URL}/api/transactions/`, {
@@ -71,25 +91,19 @@ const RecentTransactions = () => {
       setTransactions(data);
       setIsLoading(false); // Stop loading when data is fetched
     } catch (error) {
-    
       setIsLoading(false); // Stop loading even if there's an error
     }
   };
 
-  // const fetchSwapRates = async () => {
-  //   try {
-  //     const response = await fetch(`${BASE_URL}/api/swap-rates/`);
-  //     const data = await response.json();
-  //     setSwapRates(data);
-  //   } catch (error) {
-  //     ("Error fetching swap rates:", error);
-  //   }
-  // };
-
   useEffect(() => {
-    // fetchSwapRates();
+    fetchWallets();
     fetchTransactions();
   }, []);
+
+  const getWalletImage = (walletName) => {
+    const wallet = wallets.find((wallet) => wallet.wallet_name === walletName);
+    return wallet?.wallet_image;
+  };
 
   return (
     <section className="mb-8 mt-5 ">

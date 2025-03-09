@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useUser";
+import { BASE_URL, LOGO } from "@/lib/base";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -85,7 +86,8 @@ const Register = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md px-4">
         <div className="text-start mb-8">
-          <h1 className="text-4xl font-bold text-[#292a86]">GoobJoog Pay</h1>
+          <img src={LOGO} className="w-10 h-10" alt="" />
+
           <p className="text-base-500 mt-2">Create your account below.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
