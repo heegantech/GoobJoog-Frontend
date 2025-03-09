@@ -12,6 +12,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { RefreshCw } from "lucide-react";
+import { BASE_URL } from "@/lib/base";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => (
@@ -42,10 +43,10 @@ const RecentTransactions = () => {
     setUser(userData);
   }, []);
 
-  const handleRecheck = () => {
-    console.log("Rechecking...");
-    // Add your recheck logic here
-  };
+  // const handleRecheck = () => {
+  //   .log("Rechecking...");
+  //   // Add your recheck logic here
+  // };
 
   const fetchTransactions = async () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -56,14 +57,11 @@ const RecentTransactions = () => {
     // }
 
     try {
-      const response = await fetch(
-        "https://api.goobjoogpay.com/api/transactions/",
-        {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/transactions/`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -73,23 +71,23 @@ const RecentTransactions = () => {
       setTransactions(data);
       setIsLoading(false); // Stop loading when data is fetched
     } catch (error) {
-      console.error("Error:", error);
+    
       setIsLoading(false); // Stop loading even if there's an error
     }
   };
 
-  const fetchSwapRates = async () => {
-    try {
-      const response = await fetch("/api/swap-rates/");
-      const data = await response.json();
-      setSwapRates(data);
-    } catch (error) {
-      console.error("Error fetching swap rates:", error);
-    }
-  };
+  // const fetchSwapRates = async () => {
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/api/swap-rates/`);
+  //     const data = await response.json();
+  //     setSwapRates(data);
+  //   } catch (error) {
+  //     ("Error fetching swap rates:", error);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchSwapRates();
+    // fetchSwapRates();
     fetchTransactions();
   }, []);
 

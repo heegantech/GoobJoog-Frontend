@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Helmet } from "react-helmet";
 import { useAuth } from "@/hooks/useUser";
+import { BASE_URL } from "@/lib/base";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => (
@@ -40,7 +41,7 @@ export default function ProfilePage() {
     }
 
     try {
-      const response = await fetch("/auth/users/me/", {
+      const response = await fetch(`${BASE_URL}/auth/users/me/`, {
         headers: {
           Authorization: `Bearer ${access}`,
         },
@@ -54,7 +55,7 @@ export default function ProfilePage() {
       setUser(data);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching user details:", error);
+      // ("Error fetching user details:", error);
       setIsLoading(false);
     }
   };

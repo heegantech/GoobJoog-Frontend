@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/lib/base";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { toast } from "react-hot-toast";
@@ -40,7 +41,7 @@ const Withdraw = () => {
     setIsLoading(true); // Set loading to true before making the request
 
     try {
-      const response = await fetch("/api/payout/", {
+      const response = await fetch(`${BASE_URL}/api/payout/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,8 +59,8 @@ const Withdraw = () => {
         throw new Error(responseData.message);
       }
     } catch (error) {
-      toast.error(error.message);
-      console.error("Error:", error);
+      toast(error.message);
+      "Error:", error;
     } finally {
       setIsLoading(false); // Set loading to false after the request is complete
     }

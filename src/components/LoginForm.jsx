@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useUser";
 import toast from "react-hot-toast";
+import { BASE_URL } from "@/lib/base";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -30,22 +31,21 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/auth/jwt/create/", {
+      const response = await fetch(`${BASE_URL}/auth/jwt/create/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
       });
 
       const data = response.status === 204 ? {} : await response.json();
-      console.log(data);
       if (!response.ok) throw new Error(data.detail || "Login failed");
 
       login(data);
       toast.success("Login successfully.");
       navigate("/");
     } catch (error) {
-      console.error("Error:", error);
-      toast.error(error.message);
+      // ("Error:", error);
+      toast(error.message);
     } finally {
       setIsLoading(false);
     }

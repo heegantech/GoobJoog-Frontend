@@ -34,7 +34,7 @@ const Register = () => {
 
     try {
       // Register the user
-      const registerResponse = await fetch("/auth/users/", {
+      const registerResponse = await fetch(`${BASE_URL}/auth/users/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const Register = () => {
           data.phone_number?.[0] ||
           data.password?.[0] ||
           "Registration failed.";
-        toast.error(errorMessage);
+        toast(errorMessage);
         return;
       }
 
@@ -66,7 +66,7 @@ const Register = () => {
       });
 
       if (!loginResponse.ok) {
-        toast.error("Login failed after registration.");
+        toast("Login failed after registration.");
         return;
       }
 
@@ -75,7 +75,7 @@ const Register = () => {
       navigate("/"); // Redirect to the home page
       toast.success("Account created and logged in successfully.");
     } catch (error) {
-      toast.error("Error: " + error.message);
+      toast("Error: " + error.message);
     } finally {
       setLoading(false);
     }

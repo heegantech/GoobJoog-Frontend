@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import { BASE_URL } from "@/lib/base";
 
 const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
   const { method } = useParams();
@@ -77,7 +78,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     }
 
     try {
-      const response = await fetch("https://api.goobjoogpay.com/api/deposit/", {
+      const response = await fetch(`${BASE_URL}/api/deposit/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,8 +113,8 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
         throw new Error(responseData.message || "Deposit failed");
       }
     } catch (error) {
-      toast.error(error.message);
-      console.error("Error:", error);
+      toast(error.message);
+      "Error:", error;
     } finally {
       setIsLoading(false); // Stop loading after request completes
     }
@@ -123,7 +124,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData.access;
     try {
-      const response = await fetch("/auth/users/me/", {
+      const response = await fetch(`${BASE_URL}/auth/users/me/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${access}`,
@@ -136,7 +137,7 @@ const Deposit = ({ closeModal, fetchBalance, pendingPayment }) => {
       const data = await response.json();
       setLogedUser(data);
     } catch (error) {
-      // console.error("Error:", error);
+      // ("Error:", error);
     }
   };
 

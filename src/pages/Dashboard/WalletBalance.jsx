@@ -66,7 +66,7 @@ const WalletBalance = () => {
       setBalance(data);
       setLoading(false);
     } catch (error) {
-      console.error("Error:", error);
+      "Error:", error;
       setLoading(false);
       setBalance({ evcplus: 0 }); // Set default value on error
     }
@@ -91,7 +91,7 @@ const WalletBalance = () => {
       setPendingPayment(data);
       setLoading(false);
     } catch (error) {
-      console.error("Error:", error);
+      "Error:", error;
       setLoading(false);
       setPendingPayment({ total_pending_balance: 0 }); // Set default value on error
     }
@@ -205,7 +205,6 @@ const WalletBalance = () => {
       </Card>
 
       {/* Actions Section */}
-     
     </div>
   );
 };

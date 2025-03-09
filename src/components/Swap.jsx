@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/lib/base";
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { toast } from "react-hot-toast";
@@ -26,14 +27,12 @@ const Swap = () => {
       }
 
       if (!from_wallet || !to_wallet) {
-        toast.error(
-          "Please provide both 'from_wallet' and 'to_wallet' parameters."
-        );
+        toast("Please provide both 'from_wallet' and 'to_wallet' parameters.");
         return;
       }
 
       try {
-        const response = await fetch("/api/swap-rate/", {
+        const response = await fetch(`${BASE_URL}/api/swap-rate/`, {
           method: "POST", // Changed to POST request
           headers: {
             "Content-Type": "application/json", // Correct content type for POST
@@ -49,7 +48,7 @@ const Swap = () => {
 
         // Check if the response is ok
         if (!response.ok) {
-          toast.error(data.message);
+          toast(data.message);
           return;
         }
 
@@ -57,8 +56,8 @@ const Swap = () => {
         setSwapRate(data?.swap_rate || 0); // Ensure the rate is correctly set
         // setSwapFee(data?.swap_rate || 0); // Ensure the fee is correctly set
       } catch (error) {
-        console.error("Error fetching swap rate:", error);
-        toast.error("Failed to fetch swap rate: " + error.message);
+        "Error fetching swap rate:", error;
+        toast("Failed to fetch swap rate: " + error.message);
       }
     };
 
@@ -80,7 +79,7 @@ const Swap = () => {
     e.preventDefault();
 
     if (!swapData.from_wallet || !swapData.to_wallet) {
-      toast.error("Please provide both 'From' and 'To' wallet values.");
+      toast("Please provide both 'From' and 'To' wallet values.");
       return;
     }
 
@@ -115,7 +114,7 @@ const Swap = () => {
 
     try {
       // Before sending the WhatsApp message, fetch the swap
-      const response = await fetch("/api/swap/", {
+      const response = await fetch(`${BASE_URL}/api/swap/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,8 +152,8 @@ const Swap = () => {
       }
     } catch (error) {
       // Handle errors
-      toast.error(error.message);
-      console.error("Error:", error);
+      toast(error.message);
+      "Error:", error;
     }
   };
 

@@ -15,13 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowDownToLine, ArrowUpFromLine, RefreshCw } from "lucide-react";
 import { Helmet } from "react-helmet";
+import { BASE_URL } from "@/lib/base";
 
 const TransactionList = () => {
   const [modalData, setModalData] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
-  console.log(transactions);
 
   const OpenDrawer = (transaction) => {
     setModalData(transaction);
@@ -37,9 +37,7 @@ const TransactionList = () => {
           Authorization: `Bearer ${access}`,
         },
       });
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    } catch (error) {}
   };
 
   const navigate = useNavigate();
@@ -56,14 +54,11 @@ const TransactionList = () => {
     //   return;
     // }
     try {
-      const response = await fetch(
-        "https://api.goobjoogpay.com/api/transactions/",
-        {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/transactions/`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -71,7 +66,7 @@ const TransactionList = () => {
       setTransactions(data);
       setLoading(false); // Set loading to false once the data is fetched
     } catch (error) {
-      console.error("Error:", error);
+      // ("Error:", error);
       setLoading(false); // Set loading to false if there's an error
     }
   };

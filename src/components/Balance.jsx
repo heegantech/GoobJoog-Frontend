@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { BASE_URL } from "@/lib/base";
 
 const Balance = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,7 +19,7 @@ const Balance = () => {
       const userData = JSON.parse(localStorage.getItem("userData"));
       if (!userData?.access) return;
 
-      const response = await fetch("/api/balance/", {
+      const response = await fetch(`${BASE_URL}/api/balance/`, {
         method: "GET",
         headers: { Authorization: `Bearer ${userData.access}` },
       });
@@ -27,7 +28,7 @@ const Balance = () => {
       const data = await response.json();
       setBalance(data);
     } catch (error) {
-      console.error("Error fetching balance:", error);
+      "Error fetching balance:", error;
       setBalance({ evcplus: 0 });
     } finally {
       setLoading(false);
@@ -39,7 +40,7 @@ const Balance = () => {
       const userData = JSON.parse(localStorage.getItem("userData"));
       if (!userData?.access) return;
 
-      const response = await fetch("/api/pending-payments/", {
+      const response = await fetch(`${BASE_URL}/api/pending-payments/`, {
         method: "GET",
         headers: { Authorization: `Bearer ${userData.access}` },
       });
@@ -48,7 +49,7 @@ const Balance = () => {
       const data = await response.json();
       setPendingPayment(data);
     } catch (error) {
-      console.error("Error fetching pending payments:", error);
+      "Error fetching pending payments:", error;
       setPendingPayment({ total_pending_balance: 0 });
     }
   };

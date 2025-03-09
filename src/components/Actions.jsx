@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FaExchangeAlt } from "react-icons/fa";
+import { BASE_URL } from "@/lib/base";
 
 const Actions = () => {
   const [activeAction, setActiveAction] = useState(null);
@@ -26,7 +27,7 @@ const Actions = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const access = userData?.access;
     try {
-      const response = await fetch("/api/wallets/", {
+      const response = await fetch(`${BASE_URL}/api/wallets/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +42,7 @@ const Actions = () => {
       const data = await response.json();
       setWallets(data);
     } catch (error) {
-      console.error("Error fetching wallets:", error);
+      "Error fetching wallets:", error;
     }
   };
 
