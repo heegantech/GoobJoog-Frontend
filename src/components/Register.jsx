@@ -55,7 +55,7 @@ const Register = () => {
       }
 
       // Automatically log in the user after registration
-      const loginResponse = await fetch("/auth/jwt/create/", {
+      const loginResponse = await fetch(`${BASE_URL}/auth/jwt/create/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
